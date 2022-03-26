@@ -5,7 +5,7 @@ import {UserModel} from "../../models/user";
 
 const validateToken = async (req, res, next) => {
     try {
-        const authorization = req.headers.authorization || req.cookies.jwt
+        const authorization = req.headers.authorization
 
         Object.assign(req.headers, {
             user: null,
@@ -59,6 +59,7 @@ const validateToken = async (req, res, next) => {
 
         return next();
     } catch (error) {
+        console.log(error)
         return Promise.reject(new Error("Error Happened!"));
     }
 };
