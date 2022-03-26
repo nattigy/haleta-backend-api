@@ -1,63 +1,34 @@
 {
-  "name": "haleta-back-end-api",
+  "name": "haleta-new-api",
   "version": "1.0.0",
   "main": "src/index.js",
+  "repository": "https://github.com/nattigy/haleta-new-api.git",
+  "author": "nattigy <nathnaelakale@gmail.com>",
+  "license": "MIT",
   "scripts": {
-    "build": "babel src --out-dir dist",
-    "start": "node dist/index.js",
-    "dev": "nodemon --exec npx babel-node src/index.js",
-    "prettier": "prettier --config ./.prettierrc --write \"**/*.js\"",
-    "pretest": "eslint --ignore-path .gitignore .",
-    "postinstall": "rm -rf dist && yarn run build",
-    "lint": "yarn prettier --write --check --config ./.prettierrc \"**/*.js\" && eslint --fix ./src",
-    "release": "release-it patch --no-npm.publish"
+    "build": "babel src/index.js -d dist",
+    "start": "yarn build && node dist/index.js",
+    "dev": "nodemon --exec node_modules/.bin/babel-node src/index.js"
   },
   "dependencies": {
-    "@babel/cli": "^7.17.6",
-    "@babel/core": "^7.17.5",
-    "@babel/node": "^7.16.8",
-    "@babel/preset-env": "^7.16.11",
-    "apollo-engine": "^1.1.2",
-    "apollo-server-core": "^3.6.3",
-    "apollo-server-express": "^3.6.3",
-    "bcryptjs": "^2.4.3",
-    "body-parser": "^1.19.2",
-    "cors": "^2.8.5",
-    "cryptojs": "^2.5.3",
+    "apollo-server-express": "^3.6.6",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
-    "firebase-admin": "^10.0.2",
-    "firebase-tools": "^10.2.2",
     "graphql": "^16.3.0",
     "graphql-compose": "^9.0.7",
-    "graphql-compose-connection": "^8.2.1",
     "graphql-compose-mongoose": "^9.7.1",
-    "graphql-middleware": "^6.1.15",
-    "graphql-tools": "^8.2.0",
     "jsonwebtoken": "^8.5.1",
-    "moment": "^2.29.1",
-    "mongoose": "^6.2.4",
-    "mongoose-bcrypt": "^1.9.0",
-    "mongoose-timestamp": "^0.6.0",
-    "validators": "^0.3.1",
-    "yarn-upgrade-all": "^0.6.1"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn lint"
-    }
+    "mongoose": "^6.2.8",
+    "mongoose-timestamp": "^0.6.0"
   },
   "devDependencies": {
-    "babel-eslint": "^10.1.0",
-    "babel-loader": "^8.2.3",
-    "babel-preset-env": "^1.7.0",
-    "eslint": "^8.10.0",
-    "eslint-plugin-babel": "^5.3.1",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^6.0.0",
-    "fs-extra": "^10.0.1",
-    "nodemon": "^2.0.15",
-    "prettier": "^2.5.1"
+    "@babel/cli": "^7.17.6",
+    "@babel/core": "^7.17.8",
+    "@babel/node": "^7.16.8",
+    "@babel/plugin-transform-runtime": "^7.17.0",
+    "@babel/polyfill": "^7.12.1",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/runtime": "^7.17.8",
+    "nodemon": "^2.0.15"
   }
 }

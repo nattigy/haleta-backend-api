@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import {UserModel} from "../../../models/user";
-import crypto from "crypto";
+// import crypto from "crypto";
 
 const signIn = {
     name: "signIn",
@@ -148,17 +148,17 @@ const resetPassword = {
                 return Promise.reject(new Error("User not found."));
             }
 
-            const token = crypto.randomBytes(48, (err, buffer) => buffer.toString("hex"));
-            const expiresIn = moment().add(7, "days");
+            // const token = crypto.randomBytes(48, (err, buffer) => buffer.toString("hex"));
+            // const expiresIn = moment().add(7, "days");
 
-            user.set({
-                account: {
-                    resetPassword: {
-                        token,
-                        expiresIn,
-                    },
-                },
-            });
+            // user.set({
+            //     account: {
+            //         resetPassword: {
+            //             token,
+            //             expiresIn,
+            //         },
+            //     },
+            // });
 
             await user.save();
 
@@ -303,3 +303,13 @@ const verify = {
         }
     },
 };
+
+export default {
+    signIn,
+    signUp,
+    logout,
+    newPassword,
+    changePassword,
+    verify,
+    verifyRequest
+}

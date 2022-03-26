@@ -3,9 +3,10 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-mongoose.Promise = global.Promise;
+main()
+    .then(() => console.log("Mongoose connected"))
+    .catch(err => console.log(err));
 
-mongoose.connect(process.env.MONGODB_URI, () => {
-    console.log("Mongodb connected successfully")
-})
-
+async function main() {
+    await mongoose.connect(process.env.MONGODB_URI);
+}

@@ -2,7 +2,9 @@ import {UserTC} from "../../models/user";
 
 import { authentication, userValidator } from "../../middlewares";
 
-import Resolvers from "./resolvers";
+import Resolvers from "./resolvers/auth-resolvers";
+
+import "./typedefs/types"
 
 for (const resolver in Resolvers) {
     UserTC.addResolver(Resolvers[resolver]);

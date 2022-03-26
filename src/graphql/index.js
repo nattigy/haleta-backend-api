@@ -13,4 +13,5 @@ schemaComposer.Mutation.addFields({
     ...UserMutation,
 });
 
-export default schemaComposer.buildSchema();
+const schema = schemaComposer.buildSchema();
+export default schema;
