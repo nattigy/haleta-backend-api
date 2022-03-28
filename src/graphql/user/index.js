@@ -1,7 +1,7 @@
 import {UserTC} from "../../models/user";
 
 import {authentication, authorization} from "../../middlewares";
-// import Resolvers from "./services";
+// import Resolvers from "./use-cases";
 //
 // for (const resolver in Resolvers) {
 //     UserTC.addResolver(Resolvers[resolver]);

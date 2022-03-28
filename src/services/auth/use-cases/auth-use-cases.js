@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import {UserModel} from "../../../models/user";
 // import crypto from "crypto";
-import authRepository from "../repository/auth-repository";
+import authRepository from "../data-access/auth-data-access";
 
 const signIn = async ({phoneNumber, password}) => {
     try {

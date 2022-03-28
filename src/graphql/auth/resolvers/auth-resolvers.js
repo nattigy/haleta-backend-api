@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import {UserModel} from "../../../models/user";
-import authServices from "../../../services/auth/services/auth-services";
+import authServices from "../../../services/auth/use-cases/auth-use-cases";
 // import crypto from "crypto";
 
 const signIn = {
