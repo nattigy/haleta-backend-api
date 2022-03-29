@@ -49,13 +49,10 @@ const validateToken = async (req, res, next) => {
         }
 
         // if the token has come all this way everything is good just attach it to the request header
-        //attach it to https response cookie
         Object.assign(req.headers, {
             user,
             authorization,
         });
-
-        res.cookie("jwt", authorization, {secure: true, httpOnly: true})
 
         return next();
     } catch (error) {

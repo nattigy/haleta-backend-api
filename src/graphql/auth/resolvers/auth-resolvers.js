@@ -46,37 +46,14 @@ const signUp = {
                         },
                     }) => {
         try {
-            console.log("here 1")
-            
-            // let user = await UserModel.phoneNumberExist(phoneNumber);
-            // if (user) {
-            //     console.log("here 2")
-            //     return Promise.reject(new Error("Phone Number has already been taken."));
-            // }
 
-            // user = await UserModel.emailExist(email);
-            // if (user) {
-            //   return Promise.reject(new Error("Email has already been taken."));
-            // }
-            // const salt = bcrypt.genSalt(10);
-            // const hash = bcrypt.hashSync(password, salt);
-
-
-            console.log("here 3")
-
-
-            // await userService.verifyRequest(user);
-
-            // userMail.verifyRequest(user, token);
-
-            
             const {accessToken, user} = authServices.signUp({
                 firstName,
                 middleName,
                 lastName,
                 password,
-                phoneNumber, 
-                password});
+                phoneNumber,
+            });
             console.log(accessToken)   
             return {
                 accessToken,

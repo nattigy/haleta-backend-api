@@ -25,20 +25,26 @@ const signUp = async ({
   password,
 }) => {
   try {
-    let user = await new UserModel({
+
+    let user = await UserModel.phoneNumberExist(phoneNumber);
+    if (user) {
+        console.log("here 2")
+        return Promise.reject(new Error("Phone Number has already been taken."));
+    }
+
+    user = await UserModel.emailExist(email);
+    if (user) {
+      return Promise.reject(new Error("Email has already been taken."));
+    }
+    const salt = bcrypt.genSalt(10);
+    const hash = bcrypt.hashSync(password, salt);
+
+    user = await new UserModel({
       firstName,
       middleName,
       lastName,
       phoneNumber,
-      password,
-      // password: hash,
-      // roles: [roles.OWNER],
-      // account: {
-      //     phoneVerification: {
-      //         verified: true,
-      //         token: phoneVerification,
-      //     },
-      // },
+      hash,
     }).save();
 
     return user;
