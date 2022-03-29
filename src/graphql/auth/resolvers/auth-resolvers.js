@@ -13,7 +13,7 @@ const signIn = {
     resolve: async ({args: {phoneNumber, password}}) => {
         try {
 
-            const {user, accessToken} = authServices.signIn({phoneNumber, password});
+            const {user, accessToken} = await authServices.signIn({phoneNumber, password});
 
             return {accessToken, user};
         } catch (error) {

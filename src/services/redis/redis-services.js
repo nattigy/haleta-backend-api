@@ -1,5 +1,3 @@
-
-
 const storeNewSession = () => {
     // store session information on Mongo db
     // sync with redis cache (update redis) //add to redis
@@ -15,5 +13,6 @@ const syncWithRedis = () => {
 }
 
 export default {
-    storeNewSession
+    storeNewSession,
+    syncWithRedis
 }

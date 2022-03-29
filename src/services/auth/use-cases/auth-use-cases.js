@@ -4,14 +4,17 @@ import {UserModel} from "../../../models/user";
 import authRepository from "../data-access/auth-data-access";
 import client from "../../../config/redis-config";
 
+//load our .env file
+require('dotenv').config()
+
 const signIn = async ({phoneNumber, password}) => {
     try {
 
-        const user = authRepository.signIn({phoneNumber, password});
+        const user = await authRepository.signIn({phoneNumber, password});
 
         //check if session exists in mongodb increase count on mongodb
         //if session doesn't exist create a new one
-        const accessToken = await jwt.sign(user, process.env.JWT_SECRET, {
+        const accessToken = await jwt.sign(user.toJSON(), process.env.JWT_SECRET, {
             expiresIn: process.env.JWT_EXPIRATION,
         });
 

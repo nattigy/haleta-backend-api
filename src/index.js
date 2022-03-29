@@ -4,7 +4,8 @@ import {ApolloServer} from "apollo-server-express";
 import schema from "./graphql";
 import validateToken from "./middlewares/auth/validate-token";
 import "./config/mongodb-config";
-import client from "./config/redis-config";
+
+const client = require("./config/redis-config");
 
 dotenv.config();
 const app = express();

@@ -7,6 +7,7 @@ const client = new Redis({
 });
 
 client.on("error", (error) => {
+  console.log(error)
   winston.error(error);
   client.quit().then((e) => console.log(e));
 });

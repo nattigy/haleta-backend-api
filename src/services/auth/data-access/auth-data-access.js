@@ -4,9 +4,10 @@ import { UserModel } from "../../../models/user";
 
 const signIn = async ({ phoneNumber, password }) => {
   try {
-    const user = await UserModel.find({ phoneNumber });
+    const user = await UserModel.findOne({ phoneNumber });
 
-    const comparePassword = await user.comparePassword(password.toString());
+    // const comparePassword = await user.comparePassword(password.toString());
+    const comparePassword = (password.toString() === user.password)
     if (!comparePassword) {
       return Promise.reject(new Error("Password is incorrect."));
     }
