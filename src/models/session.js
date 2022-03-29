@@ -8,7 +8,6 @@ const SessionSchema = new Schema({
         ref: "User",
     },
     jwtToken: String,
-    lastUpdate: Date,
     expirationDate: Date,
     userCount: Number,
 }, {

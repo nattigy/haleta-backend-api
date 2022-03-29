@@ -12,7 +12,7 @@ for (const resolver in Resolvers) {
 
 const AuthMutation = {
     signIn: UserTC.getResolver("signIn", [authentication.isGuest, userValidator.signIn]),
-    // signUp: UserTC.getResolver("signUp", [authentication.isGuest, userValidator.signUp]),
+    signUp: UserTC.getResolver("signUp", [authentication.isGuest, userValidator.signUp]),
     // logout: UserTC.getResolver('logout', [middleware.isAuth]),
     // resetPassword: UserTC.getResolver("resetPassword", [middleware.isGuest, validators.resetPassword]),
     // newPassword: UserTC.getResolver("newPassword", [middleware.isGuest, validators.newPassword]),

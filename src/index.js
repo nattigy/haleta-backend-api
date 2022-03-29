@@ -4,6 +4,7 @@ import {ApolloServer} from "apollo-server-express";
 import schema from "./graphql";
 import validateToken from "./middlewares/auth/validate-token";
 import "./config/mongodb-config";
+import client from "./config/redis-config";
 
 dotenv.config();
 const app = express();
@@ -20,6 +21,7 @@ async function startApolloServer() {
                 user: req.headers.user,
                 headers: req.headers,
                 phoneVerification: req.headers.phoneverification || "",
+                context: { client }
             };
         },
     });
