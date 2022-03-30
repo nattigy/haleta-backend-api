@@ -21,6 +21,7 @@ const signIn = async ({phoneNumber, password}) => {
 
         if (session) {
             //session exists in mongodb'
+            console.log('sessison exists')
             let updatedDate = session.expirationDate;
             accessToken = session.jwtToken
 
@@ -34,8 +35,23 @@ const signIn = async ({phoneNumber, password}) => {
                 updatedDate = (moment(session.expirationDate).add(1,'days')).toDate()
             }
             // increase count and date of session
-            authRepository.updateSession(session,updatedDate)
+            const newSession = await authRepository.updateSession(session,updatedDate)
+            console.log('new session', newSession)
+            await redisService.syncWithRedis(client,accessToken,newSession)
+        //     let dataInRedis;
+        //     await client.get(accessToken, async(err,sessionData) => {
+        //        if (sessionData) {
+        //            dataInRedis = sessionData
+        //            console.log(sessionData)
+        //        }
+        //        else if (err){
+        //            console.log('errrr')
+        //            console.log(err)
+        //        }
+        //    })
+        //    console.log('data in redis ', dataInRedis)
         }
+ 
         else {
             //session doesn't exist create a new one
             accessToken = await jwt.sign(user.toJSON(), process.env.JWT_SECRET, {

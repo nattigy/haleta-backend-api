@@ -19,7 +19,6 @@ const signIn = async ({ phoneNumber, password }) => {
   }
 };
 
-
 const saveNewSession = async(userId,jwtToken,tomorrowDate) => {
   try {
     await new SessionModel({
@@ -48,7 +47,8 @@ const updateSession = async(session,updatedDate)  => {
   try {
     session.userCount += 1
     session.expirationDate = updatedDate
-    await session.save()
+    const newSession = await session.save()
+    return newSession
   } catch (error) {
     return Promise.reject(error);
   }
