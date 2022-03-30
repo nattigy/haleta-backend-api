@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import {UserModel} from "../../../models/user";
 import authServices from "../../../services/auth/use-cases/auth-use-cases";
+import storeNewSession from "../../../services/redis/redis-services"
 // import crypto from "crypto";
 
 const signIn = {

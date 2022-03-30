@@ -1,24 +1,54 @@
 import jwt from "jsonwebtoken";
 import {UserModel} from "../../../models/user";
+import {SessionModel} from "../../../models/session";
 // import crypto from "crypto";
 import authRepository from "../data-access/auth-data-access";
 import client from "../../../config/redis-config";
-
+import redisService from "../../redis/redis-services"
 //load our .env file
 require('dotenv').config()
 
+const moment = require("moment")
+
 const signIn = async ({phoneNumber, password}) => {
     try {
-
         const user = await authRepository.signIn({phoneNumber, password});
+        const userId = user._id
+        //check if session exists in mongodb 
+        const session = await authRepository.findSession(userId)
+        console.log(session)
+        let accessToken;
 
-        //check if session exists in mongodb increase count on mongodb
-        //if session doesn't exist create a new one
-        const accessToken = await jwt.sign(user.toJSON(), process.env.JWT_SECRET, {
-            expiresIn: process.env.JWT_EXPIRATION,
-        });
+        if (session) {
+            //session exists in mongodb'
+            let updatedDate = session.expirationDate;
+            accessToken = session.jwtToken
 
-        // storeNewSession(token, user information(id), count, last update)
+            const updatedAt = moment(session.updatedAt)
+            const now = moment(new Date());
+            
+            const duration = (moment.duration(now.diff(updatedAt))).asHours()
+            console.log(duration)
+            
+            if (duration >= 1) {
+                updatedDate = (moment(session.expirationDate).add(1,'days')).toDate()
+            }
+            // increase count and date of session
+            authRepository.updateSession(session,updatedDate)
+        }
+        else {
+            //session doesn't exist create a new one
+            accessToken = await jwt.sign(user.toJSON(), process.env.JWT_SECRET, {
+                expiresIn: process.env.JWT_EXPIRATION,
+            });
+
+            const tomorrowDate = (moment().clone().add(1,'days')).toDate()
+            // save session in mongodb
+            authRepository.saveNewSession(userId,accessToken,tomorrowDate)
+            
+            // // store session in redis
+            // redisService.storeNewSession(client,session)
+        }
         
         return {
             accessToken,
@@ -52,7 +82,6 @@ const signUp = async ({firstName,middleName,lastName,password,phoneNumber}) => {
         return Promise.reject(error);
     }
 }
-
 
 export default {
     signIn,

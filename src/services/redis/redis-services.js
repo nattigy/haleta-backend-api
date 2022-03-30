@@ -1,4 +1,4 @@
-const storeNewSession = () => {
+const storeNewSession = (client) => {
     // store session information on Mongo db
     // sync with redis cache (update redis) //add to redis
 }

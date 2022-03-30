@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { UserModel } from "../../../models/user";
+import {SessionModel} from "../../../models/session";
 // import crypto from "crypto";
 
 const signIn = async ({ phoneNumber, password }) => {
@@ -17,6 +18,41 @@ const signIn = async ({ phoneNumber, password }) => {
     return Promise.reject(error);
   }
 };
+
+
+const saveNewSession = async(userId,jwtToken,tomorrowDate) => {
+  try {
+    await new SessionModel({
+      userId:userId,
+      jwtToken:jwtToken,
+      expirationDate:tomorrowDate,
+      userCount:1
+  }).save();
+  } catch (error) {
+    console.log('error in saving new session')
+    console.log(error)
+    return Promise.reject(error);
+  }
+}
+
+const findSession = async(userId) => {
+  try {
+    const session = await SessionModel.findOne({userId});
+    return session;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+}
+
+const updateSession = async(session,updatedDate)  => {
+  try {
+    session.userCount += 1
+    session.expirationDate = updatedDate
+    await session.save()
+  } catch (error) {
+    return Promise.reject(error);
+  }
+}
 
 const signUp = async ({
   firstName,
@@ -57,4 +93,7 @@ const signUp = async ({
 export default {
   signIn,
   signUp,
+  saveNewSession,
+  findSession,
+  updateSession,
 };
