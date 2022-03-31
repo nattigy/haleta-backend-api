@@ -4,11 +4,12 @@ import authRepository from "../../services/auth/data-access/auth-data-access";
 import {UserModel} from "../../models/user";
 import redisService from "../../services/redis/redis-services"
 import client from "../../config/redis-config";
+import moment from "moment";
 
 const validateToken = async (req, res, next) => {
     try {
         const authorization = req.headers.authorization
-        console.log("authorization: ",authorization)
+        console.log("authorization: ", authorization)
         Object.assign(req.headers, {
             user: null,
             authorization: null,
@@ -27,15 +28,16 @@ const validateToken = async (req, res, next) => {
         if (!decoded) {
             // invalid token, remove the token from everywhere
             //remove from database
-            user = req.headers.user
-            const userphone = user.phoneNumber
-            const userWith = await UserModel.findOne({ userphone });
-            const userId = userWith._id
-            const session = await findSession(userId)
+            // user = req.headers.user
+            // const userphone = user.phoneNumber
+            // const userWith = await UserModel.findOne({ userphone });
+            // const userId = userWith._id
+            // const session = await findSession(userId)
 
-           await authRepository.deleteSession(session)
+            //get session based on the access token itself
+            await authRepository.deleteSession("session")
 
-            //remove from redis
+            //remove from redis just delete no need to check, remove client object
             await redisService.deleteSessionRedisForChangePassword({client, accessToken})
 
             return next();
@@ -44,46 +46,45 @@ const validateToken = async (req, res, next) => {
         if (decoded.exp * 1000 < Date.now()) {
             //remove from database
 
-            user = req.headers.user
-            const userphone = user.phoneNumber
-            const userWith = await UserModel.findOne({ userphone });
+            const userWith = await UserModel.findOne({_id: decoded._id});
             const userId = userWith._id
             const session = await findSession(userId)
 
-           await authRepository.deleteSession(session)
+            await authRepository.deleteSession(session)
 
-            //remove from redis
+            //remove from redis just delete no need to check, remove client object
             await redisService.deleteSessionRedisForChangePassword({client, accessToken})
 
             return next();
         }
 
         //check if token is in redis
-        const isSession = await redisService.checkValueInRedis(client,accessToken)
+        const isSession = await redisService.checkValueInRedis(client, accessToken)
         //if NOT in redis call next()
-        if (!isSession){
+        if (!isSession) {
             return next();
         }
-        //else check last update time if greater than or equals to 1hour update the token
-        // if less skip else update token
+            //else check last update time if greater than or equals to 1hour update the token
+            // if less skip else update token
         // authorization = new token
-        else if(isSession){
+        else if (isSession) {
             let updatedDate = isSession.expirationDate;
-            accessToken = isSession.jwtToken
+            let newAccessToken = isSession.jwtToken
 
             const updatedAt = moment(isSession.updatedAt)
             const now = moment(new Date());
-            
+
             const duration = (moment.duration(now.diff(updatedAt))).asHours()
             // console.log(duration)
-            
+
             if (duration >= 1) {
-                updatedDate = (moment(isSession.expirationDate).add(1,'days')).toDate()
+                //take amount value from environment variable
+                updatedDate = (moment(isSession.expirationDate).add(1, 'days')).toDate()
             }
             // increase count and date of session
-            const newSession = await authRepository.updateSession(isSession,updatedDate)
+            const newSession = await authRepository.updateSession(isSession, updatedDate)
             // console.log('new session', newSession)
-            await redisService.syncWithRedis(client,accessToken,newSession)
+            redisService.storeSession(newAccessToken, newSession)
         }
 
         const user = await UserModel.findById(decoded.userId);
@@ -91,9 +92,9 @@ const validateToken = async (req, res, next) => {
             //remove from database
             const session = await findSession(decoded.userId)
 
-           await authRepository.deleteSession(session)
+            await authRepository.deleteSession(session)
 
-            //remove from redis
+            //remove from redis just delete no need to check, remove client object
             await redisService.deleteSessionRedisForChangePassword({client, accessToken})
             //remove from redis
             return next();
