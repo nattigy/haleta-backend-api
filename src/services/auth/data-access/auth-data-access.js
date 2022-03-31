@@ -21,12 +21,13 @@ const signIn = async ({ phoneNumber, password }) => {
 
 const saveNewSession = async(userId,jwtToken,tomorrowDate) => {
   try {
-    await new SessionModel({
+    const session = await new SessionModel({
       userId:userId,
       jwtToken:jwtToken,
       expirationDate:tomorrowDate,
       userCount:1
   }).save();
+  return session
   } catch (error) {
     console.log('error in saving new session')
     console.log(error)

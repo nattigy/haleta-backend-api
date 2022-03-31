@@ -57,11 +57,11 @@ const signIn = async ({phoneNumber, password}) => {
             accessToken = await jwt.sign(user.toJSON(), process.env.JWT_SECRET, {
                 expiresIn: process.env.JWT_EXPIRATION,
             });
-      
+
             const tomorrowDate = (moment().clone().add(1,'days')).toDate()
             // save session in mongodb
-            await authRepository.saveNewSession(userId,accessToken,tomorrowDate)
-            await redisService.syncWithRedis(client,accessToken,newSession)
+            authRepository.saveNewSession(userId,accessToken,tomorrowDate)
+            
             // // store session in redis
             // redisService.storeNewSession(client,session)
         }
@@ -77,8 +77,9 @@ const signIn = async ({phoneNumber, password}) => {
 
 const signUp = async ({firstName,middleName,lastName,password,phoneNumber}) => {
     try {
-        const user = authRepository.signUp({firstName,middleName,lastName,password,phoneNumber})
+        const user = await authRepository.signUp({firstName,middleName,lastName,password,phoneNumber})
         const userId = user._id
+
         //check if there is an error
 
         const accessToken = await jwt.sign(
@@ -91,7 +92,8 @@ const signUp = async ({firstName,middleName,lastName,password,phoneNumber}) => {
         // storeNewSession(token, user information(id), count, last update)
         const tomorrowDate = (moment().clone().add(1,'days')).toDate()
         // save session in mongodb
-        authRepository.saveNewSession(userId,accessToken,tomorrowDate)
+        const session = await authRepository.saveNewSession(userId,accessToken,tomorrowDate)
+        await redisService.syncWithRedis(client,accessToken,session)
         return {
             accessToken,
             user,

@@ -48,7 +48,7 @@ const signUp = {
                     }) => {
         try {
 
-            const {accessToken, user} = authServices.signUp({
+            const {accessToken, user} = await authServices.signUp({
                 firstName,
                 middleName,
                 lastName,
