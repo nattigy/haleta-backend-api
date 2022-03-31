@@ -32,7 +32,7 @@ const validateToken = async (req, res, next) => {
             const session = await findSession(accessToken)
 
             //get session based on the access token itself
-            await authRepository.deleteSession("session")
+            await authRepository.deleteSession(session)
 
 
             //remove from redis
@@ -80,7 +80,7 @@ const validateToken = async (req, res, next) => {
 
             if (duration >= 1) {
 
-                updatedDate = (moment(isSession.expirationDate).add(process.env.JWT_EXPIRATION,'days')).toDate()
+                updatedDate = (now.add(process.env.JWT_EXPIRATION,'days')).toDate()
 
                 //take amount value from environment variable
 
