@@ -22,7 +22,8 @@ async function startApolloServer() {
                 user: req.headers.user,
                 headers: req.headers,
                 phoneVerification: req.headers.phoneverification || "",
-                context: { client }
+                // context: { client },
+                accessToken: req.headers.authorization || ""
             };
         },
     });

@@ -21,13 +21,13 @@ const signIn = async ({ phoneNumber, password }) => {
 
 const saveNewSession = async(userId,jwtToken,tomorrowDate) => {
   try {
-    const session = await new SessionModel({
+    const newSession = await new SessionModel({
       userId:userId,
       jwtToken:jwtToken,
       expirationDate:tomorrowDate,
       userCount:1
   }).save();
-  return session
+  return newSession
   } catch (error) {
     console.log('error in saving new session')
     console.log(error)
@@ -44,9 +44,9 @@ const findSession = async(userId) => {
   }
 }
 
-const updateSession = async(session,updatedDate)  => {
+const updateSession = async(count,session,updatedDate)  => {
   try {
-    session.userCount += 1
+    session.userCount = count
     session.expirationDate = updatedDate
     const newSession = await session.save()
     return newSession
@@ -54,6 +54,16 @@ const updateSession = async(session,updatedDate)  => {
     return Promise.reject(error);
   }
 }
+
+const deleteSession = async(session)  => {
+  try {
+    console.log('remove')
+    await session.remove()
+  } catch (error) {
+    return Promise.reject(error);
+  }
+}
+
 
 const signUp = async ({
   firstName,
@@ -91,10 +101,55 @@ const signUp = async ({
   }
 };
 
+const logout = async({user, accessToken}) => {
+  try {
+    const userId = user._id
+    const session = await findSession(userId)
+    const count = session.userCount
+    if (count > 1) {
+      count -= 1
+      updateSession(count,session,session.expirationDate)
+    }
+    //delete session
+    else if (count === 1) {
+      deleteSession(session)
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const changePassword = async({newPassword, user, accessToken}) => {
+  try {
+    console.log("sim user: ",user)
+    console.log("new password: ",newPassword)
+    console.log("pass: ", user.password)
+    const userphone = user.phoneNumber
+    const userWith = await UserModel.findOne({ userphone });
+    const userId = userWith._id
+    const session = await findSession(userId)
+
+    userWith.password=newPassword
+    const updatedUser = await userWith.save(function(err){
+      if(err)return handleErr(err);
+      //user has been updated
+      console.log("success")
+    })
+    const oldAccessTocken = accessToken
+    //delete session
+    await deleteSession(session)
+      return {updatedUser, oldAccessTocken};
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 export default {
   signIn,
   signUp,
   saveNewSession,
   findSession,
   updateSession,
+  logout,
+  changePassword,
 };

@@ -73,7 +73,7 @@ const logout = {
     resolve: async ({context: {user, accessToken}}) => {
         try {
             // await redis.set(`expiredToken:${accessToken}`, user._id, 'EX', process.env.REDIS_TOKEN_EXPIRY);
-
+            await authServices.logout({user,accessToken})
             return {succeed: true};
         } catch (error) {
             return Promise.reject(error);
@@ -81,8 +81,27 @@ const logout = {
     }
 };
 
+const changePassword = {
+    name: "changePassword",
+    type: "AccessToken!",
+    args: {
+        newPassword: "String!",
+    },
+    resolve: async ({args: {newPassword}, context: {user, accessToken}}) => {
+        try {
+console.log("changepassword")
+            const {updatedUser, oldAccessTocken} = await authServices.changePassword({newPassword, user, accessToken});
+
+            return {updatedUser, oldAccessTocken};
+        } catch (error) {
+            return Promise.reject(error);
+        }
+    },
+};
+
 export default {
     signIn,
     signUp,
     logout,
+    changePassword,
 }

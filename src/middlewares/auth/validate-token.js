@@ -6,7 +6,7 @@ import {UserModel} from "../../models/user";
 const validateToken = async (req, res, next) => {
     try {
         const authorization = req.headers.authorization
-
+        console.log("authorization: ",authorization)
         Object.assign(req.headers, {
             user: null,
             authorization: null,
@@ -17,7 +17,7 @@ const validateToken = async (req, res, next) => {
         }
 
         const accessToken = authorization.split(" ")[1];
-
+        console.log("accessTocken: ", accessToken);
         let decoded;
         if (accessToken) {
             decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
