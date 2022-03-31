@@ -1,7 +1,14 @@
-const storeNewSession = (accessToken,session) => {
+const storeNewSession = (client,accessToken,session) => {
     // store session information on Mongo db
     // sync with redis cache (update redis) //add to redis
-    client.set(accessToken,JSON.stringify(session))
+    client.set(accessToken,JSON.stringify(session),(err,reply) => {
+        if (err) {
+            console.log(err.message)
+            console.log('errrr')
+            return Promise.reject(err)
+        }
+        return Promise.resolve(session)
+    })
 }
 
 //add to redis
