@@ -1,15 +1,13 @@
 import jwt from "jsonwebtoken";
-import authRepository from "../../services/auth/data-access/auth-data-access";
-// import redis from "../config/redis-config";
-import {UserModel} from "../../models/user";
-import redisService from "../../services/redis/redis-services"
-import client from "../../config/redis-config";
 import moment from "moment";
+import authRepository from "../../services/auth/data-access/auth-data-access";
+import {UserModel} from "../../models/user";
+import redisService from "../../services/redis/redis-services";
 
 const validateToken = async (req, res, next) => {
     try {
         const authorization = req.headers.authorization
-        console.log("authorization: ", authorization)
+
         Object.assign(req.headers, {
             user: null,
             authorization: null,
@@ -19,93 +17,51 @@ const validateToken = async (req, res, next) => {
             return next();
         }
 
-        const accessToken = authorization.split(" ")[1];
-        console.log("accessTocken: ", accessToken);
-        let decoded;
-        if (accessToken) {
-            decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
+        let accessToken;
+        if (authorization.split(" ").length < 2) {
+            return next();
         }
+        accessToken = authorization.split(" ")[1];
+
+        let decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
+
         if (!decoded) {
-            // invalid token, remove the token from everywhere
-            //remove from database
-
-            const session = await findSession(accessToken)
-
-            //get session based on the access token itself
-            await authRepository.deleteSession(session)
-
-
-            //remove from redis
-            await client.del(accessToken)
-
+            await authRepository.deleteSession(accessToken)
+            await redisService.deleteSession(accessToken)
             return next();
         }
 
         if (decoded.exp * 1000 < Date.now()) {
-            //remove from database
-
-            const userWith = await UserModel.findOne({_id: decoded._id});
-            const userId = userWith._id
-            const session = await findSession(userId)
-
-            await authRepository.deleteSession(session)
-
-            //remove from redis
-            await client.del(accessToken)
-
+            await authRepository.deleteSession(accessToken)
+            await redisService.deleteSession(accessToken)
             return next();
         }
 
         //check if token is in redis
 
         const isSession = await redisService.checkValueInRedis(accessToken)
-
-        //if NOT in redis call next()
         if (!isSession) {
             return next();
         }
-            //else check last update time if greater than or equals to 1hour update the token
-            // if less skip else update token
-        // authorization = new token
-        else if (isSession) {
-            let updatedDate = isSession.expirationDate;
 
-            let newAccessToken = isSession.jwtToken
+        if (isSession) {
+            let updatedDate = isSession.expirationDate;
 
             const updatedAt = moment(isSession.updatedAt)
             const now = moment(new Date());
-
-            const duration = (moment.duration(now.diff(updatedAt))).asHours()
-            // console.log(duration)
+            const duration = (moment.duration(now.diff(updatedAt))).asHours();
 
             if (duration >= 1) {
-
-                updatedDate = (now.add(process.env.JWT_EXPIRATION,'days')).toDate()
-
-                //take amount value from environment variable
-
+                updatedDate = (now.add(process.env.JWT_EXPIRATION, 'days')).toDate()
+                const newSession = await authRepository.updateSessionExpirationTime(isSession, updatedDate)
+                await redisService.storeSession(accessToken, newSession)
             }
-            // increase count and date of session
-            const newSession = await authRepository.updateSession(isSession, updatedDate)
-            // console.log('new session', newSession)
-
-            await redisService.storeSession(newAccessToken, newSession)
         }
 
-        const user = await UserModel.findById(decoded.userId);
+        const user = await UserModel.findById(decoded._id);
         if (!user) {
-            //remove from database token
-            const session = await authRepository.findSession(accessToken)
-
-            await authRepository.deleteSession(session)
-
-
-            //remove from redis
-            await client.del(accessToken)
-
-            //remove from redis just delete no need to check, remove client object
-
-            //remove from redis
+            await authRepository.deleteSession(accessToken)
+            await redisService.deleteSession(accessToken)
             return next();
         }
 
@@ -117,7 +73,6 @@ const validateToken = async (req, res, next) => {
 
         return next();
     } catch (error) {
-        console.log(error)
         return Promise.reject(new Error("Error Happened!"));
     }
 };

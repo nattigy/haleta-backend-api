@@ -1,10 +1,10 @@
 import client from "../../config/redis-config";
 
 //update single token data
-const storeSession = async  (accessToken,session) => {
+const storeSession = async (accessToken, session) => {
     //fetch from mongodb
     //update the whole cache
-    client.set(accessToken,JSON.stringify(session),(err,reply) => {
+    client.set(accessToken, JSON.stringify(session), (err, reply) => {
         if (err) {
             console.log(err.message)
             return Promise.reject(err)
@@ -16,11 +16,10 @@ const storeSession = async  (accessToken,session) => {
 //delete single token data(token string)
 const updateSession = async (accessToken) => {
     let userSession;
-    await client.get(accessToken, (err,sessionData) => {
+    await client.get(accessToken, (err, sessionData) => {
         if (sessionData) {
             userSession = sessionData
-        }
-        else if (err){
+        } else if (err) {
             console.log(err)
         }
     })
@@ -30,38 +29,39 @@ const updateSession = async (accessToken) => {
 
     if (count > 1) {
         userSession.count -= 1
-        storeSession(accessToken,userSession)
-      }
-      //delete session
-      else if (count === 1) {
+        storeSession(accessToken, userSession)
+    }
+    //delete session
+    else if (count === 1) {
         client.del(accessToken)
-      }
+    }
 }
 
-const deleteSession= async (accessToken) => {
-    let userSession;
-    await client.get(accessToken, (err,sessionData) => {
-        if (sessionData) {
-            userSession = sessionData
-        }
-        else if (err){
-            console.log(err)
-        }
-    })
+const deleteSession = async (accessToken) => {
+    //we only need to delete from redis cache no need to get I dont see the point on doing that
 
-    userSession = JSON.parse(userSession)
-    const count = userSession.userCount
-    client.del(accessToken) 
+    // let userSession;
+    // await client.get(accessToken, (err,sessionData) => {
+    //     if (sessionData) {
+    //         userSession = sessionData
+    //     }
+    //     else if (err){
+    //         console.log(err)
+    //     }
+    // })
+    //
+    // userSession = JSON.parse(userSession)
+    // const count = userSession.userCount
+    client.del(accessToken)
 }
 
 const checkValueInRedis = async (accessToken) => {
     let userSession;
-    const value = await client.get(accessToken, (err,sessionData) => {
+    await client.get(accessToken, (err, sessionData) => {
         if (sessionData) {
             userSession = sessionData
-        }
-        else if (err){
-            console.log(err)
+        } else if (err) {
+            return Promise(new Error("Session Not found"))
         }
     })
 

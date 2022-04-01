@@ -1,7 +1,5 @@
 import {UserTC} from "../../models/user";
-
-import { authentication, userValidator } from "../../middlewares";
-
+import {authentication, userValidator} from "../../middlewares";
 import Resolvers from "./resolvers/auth-resolvers";
 
 import "./typedefs/types"
