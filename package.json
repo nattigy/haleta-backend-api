@@ -19,8 +19,11 @@
     "graphql-compose-mongoose": "^9.7.1",
     "ioredis": "^5.0.1",
     "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.1",
     "mongoose": "^6.2.8",
     "mongoose-timestamp": "^0.6.0",
+    "redis": "^4.0.4",
+    "redis-commander": "^0.7.2",
     "winston": "^3.6.0"
   },
   "devDependencies": {
