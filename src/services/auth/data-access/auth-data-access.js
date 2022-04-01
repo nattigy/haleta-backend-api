@@ -1,6 +1,8 @@
 import jwt from "jsonwebtoken";
 import { UserModel } from "../../../models/user";
 import {SessionModel} from "../../../models/session";
+import bcrypt from 'bcrypt';
+
 // import crypto from "crypto";
 
 const signIn = async ({ phoneNumber, password }) => {
@@ -35,9 +37,9 @@ const saveNewSession = async(userId,jwtToken,tomorrowDate) => {
   }
 }
 
-const findSession = async(userId) => {
+const findSession = async(key) => {
   try {
-    const session = await SessionModel.findOne({userId});
+    const session = await SessionModel.findOne({key});
     return session;
   } catch (error) {
     return Promise.reject(error);
@@ -74,25 +76,25 @@ const signUp = async ({
 }) => {
   try {
 
-    // let user = await UserModel.phoneNumberExist(phoneNumber);
-    // if (user) {
-    //     console.log("here 2")
-    //     return Promise.reject(new Error("Phone Number has already been taken."));
-    // }
+    let user = await UserModel.phoneNumberExist(phoneNumber);
+    if (user) {
+        console.log("here 2")
+        return Promise.reject(new Error("Phone Number has already been taken."));
+    }
 
     // user = await UserModel.emailExist(email);
     // if (user) {
     //   return Promise.reject(new Error("Email has already been taken."));
     // }
-    // const salt = bcrypt.genSalt(10);
-    // const hash = bcrypt.hashSync(password, salt);
+    const salt = bcrypt.genSalt(10);
+    const hash = bcrypt.hashSync(password, salt);
 
-    const user = await new UserModel({
+    user = await new UserModel({
       firstName,
       middleName,
       lastName,
       phoneNumber,
-      password,
+      hash,
     }).save();
 
     return user;

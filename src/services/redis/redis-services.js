@@ -1,19 +1,9 @@
+import client from "../../config/redis-config";
+
 //add to redis
-const storeNewSession = async (client,accessToken,session) => {
-    // store session information on Mongo db
-    // sync with redis cache (update redis) //add to redis
-    client.set(accessToken,JSON.stringify(session),(err,reply) => {
-        if (err) {
-            console.log(err.message)
-            console.log('errrr')
-            return Promise.reject(err)
-        }
-        return Promise.resolve(session)
-    })
-}
 
 //delete single token data(token string)
-const deleteSessionRedis = async (client,accessToken) => {
+const updateSession = async (accessToken) => {
     console.log('deleting session redis')
     let userSession;
     await client.get(accessToken, (err,sessionData) => {
@@ -44,7 +34,7 @@ const deleteSessionRedis = async (client,accessToken) => {
       }
 }
 
-const deleteSessionRedisForChangePassword = async (client,accessToken) => {
+const deleteSessionCompletely= async (accessToken) => {
     console.log('deleting session redis')
     let userSession;
     await client.get(accessToken, (err,sessionData) => {
@@ -71,7 +61,7 @@ const deleteSessionRedisForChangePassword = async (client,accessToken) => {
 }
 
 //update single token data
-const syncWithRedis = async  (client,accessToken,session) => {
+const storeNewSession = async  (accessToken,session) => {
     //fetch from mongodb
     //update the whole cache
     console.log(accessToken)
@@ -87,7 +77,7 @@ const syncWithRedis = async  (client,accessToken,session) => {
     })
 }
 
-const checkValueInRedis = async (client,accessToken) => {
+const checkValueInRedis = async (accessToken) => {
     console.log('cheking session redis')
     let userSession;
     const value = await client.get(accessToken, (err,sessionData) => {
@@ -111,8 +101,7 @@ const checkValueInRedis = async (client,accessToken) => {
 
 export default {
     storeNewSession,
-    syncWithRedis,
-    deleteSessionRedis,
-    deleteSessionRedisForChangePassword,
+    updateSession,
+    deleteSessionCompletely,
     checkValueInRedis,
 }

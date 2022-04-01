@@ -27,16 +27,13 @@ const validateToken = async (req, res, next) => {
         if (!decoded) {
             // invalid token, remove the token from everywhere
             //remove from database
-            user = req.headers.user
-            const userphone = user.phoneNumber
-            const userWith = await UserModel.findOne({ userphone });
-            const userId = userWith._id
-            const session = await findSession(userId)
+        
+            const session = await findSession(accessToken)
 
            await authRepository.deleteSession(session)
 
             //remove from redis
-            await redisService.deleteSessionRedisForChangePassword({client, accessToken})
+            await client.del(accessToken)
 
             return next();
         }
@@ -44,22 +41,20 @@ const validateToken = async (req, res, next) => {
         if (decoded.exp * 1000 < Date.now()) {
             //remove from database
 
-            user = req.headers.user
-            const userphone = user.phoneNumber
-            const userWith = await UserModel.findOne({ userphone });
+            const userWith = await UserModel.findOne( decoded.userId );
             const userId = userWith._id
             const session = await findSession(userId)
 
            await authRepository.deleteSession(session)
 
             //remove from redis
-            await redisService.deleteSessionRedisForChangePassword({client, accessToken})
+            await client.del(accessToken)
 
             return next();
         }
 
         //check if token is in redis
-        const isSession = await redisService.checkValueInRedis(client,accessToken)
+        const isSession = await redisService.checkValueInRedis(accessToken)
         //if NOT in redis call next()
         if (!isSession){
             return next();
@@ -69,7 +64,7 @@ const validateToken = async (req, res, next) => {
         // authorization = new token
         else if(isSession){
             let updatedDate = isSession.expirationDate;
-            accessToken = isSession.jwtToken
+            let accessToken = isSession.jwtToken
 
             const updatedAt = moment(isSession.updatedAt)
             const now = moment(new Date());
@@ -78,23 +73,23 @@ const validateToken = async (req, res, next) => {
             // console.log(duration)
             
             if (duration >= 1) {
-                updatedDate = (moment(isSession.expirationDate).add(1,'days')).toDate()
+                updatedDate = (moment(isSession.expirationDate).add(process.env.JWT_EXPIRATION,'days')).toDate()
             }
             // increase count and date of session
             const newSession = await authRepository.updateSession(isSession,updatedDate)
             // console.log('new session', newSession)
-            await redisService.syncWithRedis(client,accessToken,newSession)
+            await redisService.storeNewSession(accessToken,newSession)
         }
 
         const user = await UserModel.findById(decoded.userId);
         if (!user) {
-            //remove from database
-            const session = await findSession(decoded.userId)
+            //remove from database token
+            const session = await authRepository.findSession(accessToken)
 
-           await authRepository.deleteSession(session)
+            await authRepository.deleteSession(session)
 
             //remove from redis
-            await redisService.deleteSessionRedisForChangePassword({client, accessToken})
+            await client.del(accessToken)
             //remove from redis
             return next();
         }
