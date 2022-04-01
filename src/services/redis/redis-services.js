@@ -87,9 +87,32 @@ const syncWithRedis = async  (client,accessToken,session) => {
     })
 }
 
+const checkValueInRedis = async (client,accessToken) => {
+    console.log('cheking session redis')
+    let userSession;
+    const value = await client.get(accessToken, (err,sessionData) => {
+        if (sessionData) {
+            console.log('here')
+            userSession = sessionData
+            console.log(sessionData)
+        }
+        else if (err){
+            console.log('errrr')
+            console.log(err)
+        }
+    })
+    console.log(accessToken)
+    console.log(userSession)
+    userSession = JSON.parse(userSession)
+    console.log(userSession)
+    console.log(userSession.userCount)
+    return userSession;
+}
+
 export default {
     storeNewSession,
     syncWithRedis,
     deleteSessionRedis,
-    deleteSessionRedisForChangePassword
+    deleteSessionRedisForChangePassword,
+    checkValueInRedis,
 }
