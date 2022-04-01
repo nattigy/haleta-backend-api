@@ -13,7 +13,7 @@ const authorization = async (resolve, source, args, context, info) => {
     let hasAccess = false
     //list from redis, list of functions for each role
     user.roles.forEach(role => {
-        if(accessList[role].includes(fieldName)){
+        if (accessList[role].includes(fieldName)) {
             hasAccess = true
         }
     })
