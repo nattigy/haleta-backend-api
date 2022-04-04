@@ -1,55 +1,38 @@
 import sessionDataAccess from "../data-access/session-data-access";
 import SessionDataAccess from "../data-access/session-data-access";
-import client from "../../../config/redis-config";
+import {calculateExpirationDate, jwtSign} from "../../../helpers/helpers";
+import redisServices from "../redis-services/redis-services";
 
-const saveNewSession = async (userId, jwtToken, expirationDate) => {
+const saveNewSession = async (user) => {
     try {
-        const session = sessionDataAccess.saveNewSession(userId, jwtToken, expirationDate);
+        const accessToken = jwtSign({
+            _id: user._id,
+            firstName: user.firstName,
+            middleName: user.middleName,
+            role: user.role,
+        });
+        const expirationDate = calculateExpirationDate();
+        const session = sessionDataAccess.saveNewSession(user._id, accessToken, expirationDate);
 
-        client.set(jwtToken, JSON.stringify(session), (err, reply) => {
-            if (err) {
-                return Promise.reject(err)
-            }
-            return Promise.resolve(session)
-        })
+        await redisServices.saveNewSession(accessToken, session)
+
+        return session;
     } catch (error) {
         return Promise.reject(error);
     }
-}
-
-const findSession = async (accessToken) => {
-    let userSession;
-    await client.get(accessToken, (err, sessionData) => {
-        if (sessionData) {
-            userSession = JSON.parse(sessionData)
-        } else if (err) {
-            return Promise(new Error("Session Not found"))
-        }
-    })
-    return userSession;
-
-    // try {
-    //
-    //     // const sessionData = JSON.parse(client.get(accessToken));
-    //     return SessionModel.find({jwtToken: accessToken});
-    // } catch (error) {
-    //     return Promise.reject(error);
-    // }
 }
 
 const findUser = async (userId) => {
     return sessionDataAccess.findUser(userId);
 }
 
-const updateSession = async (count, session, updatedDate) => {
+const updateSession = async (session) => {
     try {
-        const newSession = await sessionDataAccess.updateSession(count, session, updatedDate)
-        client.set(newSession.jwtToken, JSON.stringify(newSession), (err, reply) => {
-            if (err) {
-                return Promise.reject(err)
-            }
-            return Promise.resolve(newSession)
-        })
+        session.expirationDate = calculateExpirationDate();
+        const newSession = await sessionDataAccess.updateSession(session)
+
+        await redisServices.saveNewSession(newSession.jwtToken, newSession)
+
         return newSession;
     } catch (error) {
         return Promise.reject(error);
@@ -58,7 +41,7 @@ const updateSession = async (count, session, updatedDate) => {
 
 const deleteSession = async (accessToken) => {
     try {
-        client.del(accessToken)
+        await redisServices.deleteSession(accessToken);
         await SessionDataAccess.deleteSession(accessToken)
     } catch (error) {
         return Promise.reject(error);
@@ -67,7 +50,6 @@ const deleteSession = async (accessToken) => {
 
 export default {
     saveNewSession,
-    findSession,
     findUser,
     updateSession,
     deleteSession,

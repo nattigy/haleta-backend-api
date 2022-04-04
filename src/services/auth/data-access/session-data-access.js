@@ -38,13 +38,12 @@ const findUser = async (userId) => {
     }
 }
 
-const updateSession = async (count, session, updatedDate) => {
+const updateSession = async (session) => {
     try {
-        const newSession = await SessionModel.findById(session._id)
-        newSession.userCount = count
-        newSession.expirationDate = updatedDate
-        await newSession.save()
-        return newSession;
+        return SessionModel.findByIdAndUpdate(session._id, {
+            userCount: session.userCount,
+            expirationDate: session.expirationDate,
+        })
     } catch (error) {
         return Promise.reject(error);
     }

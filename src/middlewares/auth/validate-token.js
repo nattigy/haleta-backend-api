@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import moment from "moment";
 import sessionUseCases from "../../services/auth/use-cases/session-use-cases";
+import redisServices from "../../services/auth/redis-services/redis-services";
 
 const validateToken = async (req, res, next) => {
     try {
@@ -23,32 +24,24 @@ const validateToken = async (req, res, next) => {
 
         let decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
 
-        if (!decoded) {
-            await sessionUseCases.deleteSession(accessToken)
-            return next();
-        }
-
-        if (decoded.exp * 1000 < Date.now()) {
+        if (!decoded || (decoded.exp * 1000 < Date.now())) {
             await sessionUseCases.deleteSession(accessToken)
             return next();
         }
 
         //check if token is in redis
-        const isSession = await sessionUseCases.findSession(accessToken)
-        if (!isSession) {
+        const session = await redisServices.findSession(accessToken)
+        if (!session) {
             return next();
         }
 
-        if (isSession) {
-            let updatedDate = isSession.expirationDate;
-
-            const updatedAt = moment(isSession.updatedAt)
+        if (session) {
+            const updatedAt = moment(session.updatedAt)
             const now = moment(new Date());
             const duration = (moment.duration(now.diff(updatedAt))).asHours();
 
             if (duration >= 1) {
-                updatedDate = (now.add(process.env.JWT_EXPIRATION, 'days')).toDate()
-                await sessionUseCases.updateSession(isSession.userCount, isSession, updatedDate)
+                await sessionUseCases.updateSession(session)
             }
         }
 

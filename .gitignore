@@ -4,3 +4,4 @@
 firebase
 
 dist
+/node_modules/

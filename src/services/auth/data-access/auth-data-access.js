@@ -1,6 +1,5 @@
 import bcrypt from 'bcrypt';
 import {UserModel} from "../../../models/user";
-import {SessionModel} from "../../../models/session";
 
 const signIn = async ({phoneNumber, password}) => {
     try {
@@ -47,20 +46,6 @@ const signUp = async ({
     }
 };
 
-const logout = async (accessToken) => {
-    try {
-        const session = await SessionModel.find({jwtToken: accessToken})
-        if (session.userCount > 1) {
-            session.userCount -= 1
-            await session.save();
-        } else {
-            await session.remove();
-        }
-    } catch (error) {
-        return Promise.reject(error);
-    }
-}
-
 const changePassword = async ({newPassword, user}) => {
     try {
         const salt = await bcrypt.genSalt(10);
@@ -74,6 +59,5 @@ const changePassword = async ({newPassword, user}) => {
 export default {
     signIn,
     signUp,
-    logout,
     changePassword,
 };
