@@ -9,13 +9,13 @@ const signIn = {
     },
     resolve: async ({args: {phoneNumber, password}}) => {
         try {
-            return authServices.signIn({phoneNumber, password});
+            const accessToken = await authServices.signIn({phoneNumber, password});
+            return {accessToken}
         } catch (error) {
             return Promise.reject(error);
         }
     },
 };
-
 
 const signUp = {
     name: "signUp",
@@ -24,25 +24,28 @@ const signUp = {
         firstName: "String!",
         middleName: "String!",
         password: "String!",
+        phoneNumber: "String!",
     },
     resolve: async ({
                         args: {
                             firstName,
                             middleName,
                             password,
+                            phoneNumber
                         },
-                        context: {
-                            phoneNumber,
-                        },
+                        // context: {
+                        //     phoneNumber,
+                        // },
                     }) => {
         try {
 
-            return authServices.signUp({
+            const accessToken = await authServices.signUp({
                 firstName,
                 middleName,
                 password,
                 phoneNumber,
             });
+            return {accessToken}
         } catch (error) {
             return Promise.reject(error);
         }
@@ -70,9 +73,10 @@ const changePassword = {
     },
     resolve: async ({args: {newPassword}, context: {user, accessToken}}) => {
         try {
-            const {updatedUser, oldAccessToken} = await authServices.changePassword({newPassword, user, accessToken});
-
-            return {updatedUser, oldAccessToken};
+            const newAccessToken = await authServices.changePassword(
+                {newPassword, user, accessToken}
+            );
+            return {accessToken: newAccessToken};
         } catch (error) {
             return Promise.reject(error);
         }

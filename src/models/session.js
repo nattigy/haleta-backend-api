@@ -3,13 +3,13 @@ import timestamps from "mongoose-timestamp";
 import {composeWithMongoose} from "graphql-compose-mongoose";
 
 const SessionSchema = new Schema({
+    jwtToken: String,
+    expirationDate: Date,
+    userCount: Number,
     userId: {
         type: Schema.Types.ObjectId,
         ref: "User",
     },
-    jwtToken: String,
-    expirationDate: Date,
-    userCount: Number,
 }, {
     collection: "sessions",
 });

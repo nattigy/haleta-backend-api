@@ -1,8 +1,6 @@
 import jwt from "jsonwebtoken";
 import moment from "moment";
-import authRepository from "../../services/auth/data-access/auth-data-access";
-import {UserModel} from "../../models/user";
-import redisService from "../../services/redis/redis-services";
+import sessionUseCases from "../../services/auth/use-cases/session-use-cases";
 
 const validateToken = async (req, res, next) => {
     try {
@@ -26,20 +24,17 @@ const validateToken = async (req, res, next) => {
         let decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
 
         if (!decoded) {
-            await authRepository.deleteSession(accessToken)
-            await redisService.deleteSession(accessToken)
+            await sessionUseCases.deleteSession(accessToken)
             return next();
         }
 
         if (decoded.exp * 1000 < Date.now()) {
-            await authRepository.deleteSession(accessToken)
-            await redisService.deleteSession(accessToken)
+            await sessionUseCases.deleteSession(accessToken)
             return next();
         }
 
         //check if token is in redis
-
-        const isSession = await redisService.checkValueInRedis(accessToken)
+        const isSession = await sessionUseCases.findSession(accessToken)
         if (!isSession) {
             return next();
         }
@@ -53,15 +48,13 @@ const validateToken = async (req, res, next) => {
 
             if (duration >= 1) {
                 updatedDate = (now.add(process.env.JWT_EXPIRATION, 'days')).toDate()
-                const newSession = await authRepository.updateSessionExpirationTime(isSession, updatedDate)
-                await redisService.storeSession(accessToken, newSession)
+                await sessionUseCases.updateSession(isSession.userCount, isSession, updatedDate)
             }
         }
 
-        const user = await UserModel.findById(decoded._id);
+        const user = await sessionUseCases.findUser(decoded._id);
         if (!user) {
-            await authRepository.deleteSession(accessToken)
-            await redisService.deleteSession(accessToken)
+            await sessionUseCases.deleteSession(accessToken)
             return next();
         }
 
@@ -78,56 +71,3 @@ const validateToken = async (req, res, next) => {
 };
 
 export default validateToken;
-
-
-// ------------- authorization ------------------
-
-// let check_user_action = async (req,action,resource) =>{
-//   if(!['updateOwn','deleteOwn'].includes(action)){
-//     return true
-//   }
-//
-//   const userResource = new Set()
-//
-//   if(resource == 'tender'){
-//     let userTender = await Tender.find({ creator_user: req.user._id })
-//     userTender.forEach(tender => userResource.add(`${tender._id}`))
-//
-//   }else if(resource == 'company'){
-//     let userCompany = await Company.find({ creator_user: req.user._id })
-//     userCompany.forEach(company => userResource.add( `${company._id}`))
-//
-//   }else if(resource == 'award'){
-//     let userAward = await Award.find({ creator_user: req.user._id })
-//     userAward.forEach(award => userResource.add(`${award._id}`))
-//   }
-//
-//   if(!userResource.has(req.params.id)){
-//     return false
-//   }
-//
-//   return true
-// }
-//
-//
-//
-// exports.authorize = function (action, resource) {
-//   return async (req, res, next) => {
-//     try {
-//       const permission = roles.can(req.user.role)[action](resource);
-//
-//       if (!permission.granted) {
-//         return res.status(401).send("You don't have enough permission to perform this action");
-//       }
-//
-//       let result = await check_user_action(req,action,resource)
-//       if(!result){
-//         return res.status(401).send({ param: resource , msg: `You are not authorized to edit this ${resource}.` })
-//       }
-//
-//       next()
-//     } catch (error) {
-//       return res.status(401).send("You don't have enough permission to perform this action")
-//     }
-//   }
-// }
