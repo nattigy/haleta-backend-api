@@ -17,10 +17,26 @@ async function startApolloServer() {
         path: "/",
         context: ({req}) => {
             return {
-                user: req.headers.user,
+                user: {
+                    "firstName": "simret",
+                    "middleName": "Ashenafi",
+                    "email": "",
+                    "phoneNumber": "+251970325090",
+                    "image": "",
+                    "password": "",
+                    "status": "ACTIVE",
+                    "role": "NORMAL",
+                    "updatedAt": {
+                        "$date": "2022-04-05T19:54:30.707Z"
+                    },
+                    "createdAt": {
+                        "$date": "2022-04-05T19:54:30.707Z"
+                    },
+                    "__v": 0
+                },
                 headers: req.headers,
                 phoneVerification: req.headers.phoneverification || "",
-                accessToken: req.headers.authorization || ""
+                accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjRjOWU3NjkxMzZlZTEzNTZkM2ZlZDciLCJmaXJzdE5hbWUiOiJzaW1yZXQiLCJtaWRkbGVOYW1lIjoiQXNoZW5hZmkiLCJyb2xlIjoiTk9STUFMIiwiaWF0IjoxNjQ5MTg4NDcwfQ.JntDmX_i9jlFdyOFt5RebpeyZoQgqR1gClqcwyWwF7U"
             };
         },
     });

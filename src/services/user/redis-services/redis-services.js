@@ -8,6 +8,11 @@ const saveNewSession = async (accessToken, session) => {
         return Promise.resolve(session)
     })
 }
+const deleteSession = async (accessToken) => {
+    await client.del(accessToken)
+}
+
 export default {
     saveNewSession,
+    deleteSession,
 }

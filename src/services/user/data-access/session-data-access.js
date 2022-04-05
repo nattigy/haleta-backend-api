@@ -13,6 +13,16 @@ const saveNewSession = async (userId, jwtToken, expirationDate) => {
         return Promise.reject(error);
     }
 }
+
+const deleteSession = async (accessToken) => {
+    try {
+        await SessionModel.findOneAndDelete({jwtToken: accessToken})
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
 export default {
     saveNewSession,
+    deleteSession,
 };

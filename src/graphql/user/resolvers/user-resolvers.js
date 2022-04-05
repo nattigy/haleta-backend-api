@@ -1,4 +1,4 @@
-import authServices from "../../../services/user/use-cases/auth-use-cases";
+import authServices from "../../../services/user/use-cases/user-use-cases";
 
 const createOneUser = {
     name: "createOneUser",
@@ -36,6 +36,44 @@ const createOneUser = {
     },
 };
 
+const updateUserEmail = {
+    name: "updateUserEmail",
+    type: "AccessToken!",
+    args: {
+        newEmail: "String!",
+    },
+    resolve: async ({args: {newEmail}, context: {user, accessToken}}) => {
+        try {
+            const newAccessToken = await authServices.updateUserEmail(
+                {newEmail, user, accessToken}
+            );
+            return {accessToken: newAccessToken};
+        } catch (error) {
+            return Promise.reject(error);
+        }
+    },
+};
+
+const updateUserPhonenumber = {
+    name: "updateUserPhonenumber",
+    type: "AccessToken!",
+    args: {
+        newPhonenumber: "String!",
+    },
+    resolve: async ({args: {newPhonenumber}, context: {user, accessToken}}) => {
+        try {
+            const newAccessToken = await authServices.updateUserPhonenumber(
+                {newPhonenumber, user, accessToken}
+            );
+            return {accessToken: newAccessToken};
+        } catch (error) {
+            return Promise.reject(error);
+        }
+    },
+};
+
 export default{
     createOneUser,
+    updateUserEmail,
+    updateUserPhonenumber,
 }

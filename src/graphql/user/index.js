@@ -24,7 +24,8 @@ const UserMutation = {
     userRemoveOne: UserTC.getResolver("removeOne", [authentication.isAuth, authorization]),
     userRemoveMany: UserTC.getResolver("removeMany", [authentication.isAuth, authorization]),
     createOneUser: UserTC.getResolver("createOneUser", [authentication.isAuth, authorization]),
-
+    updateUserEmail: UserTC.getResolver("updateUserEmail", [authentication.isAuth, authorization]),
+    updateUserPhonenumber: UserTC.getResolver("updateUserPhonenumber", [authentication.isAuth, authorization]),
 };
 
 export {UserQuery, UserMutation};

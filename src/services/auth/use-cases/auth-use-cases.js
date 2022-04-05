@@ -32,7 +32,8 @@ const signUp = async ({firstName, middleName, lastName, password, phoneNumber}) 
         if (!user) {
             return Promise.reject(new Error("Signup Error!"));
         }
-        return sessionUseCases.saveNewSession(user);
+        const session = await sessionUseCases.saveNewSession(user);
+        return session.jwtToken;
     } catch (error) {
         return Promise.reject(error);
     }
