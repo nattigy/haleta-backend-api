@@ -1,6 +1,10 @@
 import bcrypt from "bcrypt";
 import { UserModel } from "../../../models/user";
 
+const salt = async()=>{
+  return await bcrypt.genSalt(10);
+} 
+
 const createOneUser = async ({
   firstName,
   middleName,
@@ -15,7 +19,6 @@ const createOneUser = async ({
       return Promise.reject(new Error("Phone Number has already been taken."));
     }
 
-    const salt = await bcrypt.genSalt(10);
     let hashedPassword = "";
     if (password != "") {
       hashedPassword = await bcrypt.hash(password, salt);
@@ -52,8 +55,19 @@ const updateUserPhonenumber = async ({newPhonenumber, user}) => {
     }
 }
 
+const updateUserPassword = async ({newPassword, user}) => {
+  try {
+      const hashPassword = await bcrypt.hash(newPassword, salt);
+      const updatedUser = await UserModel.findByIdAndUpdate(user._id, {password: hashPassword})
+      return updatedUser
+  } catch (error) {
+      Promise.reject(error)
+  }
+}
+
 export default {
   createOneUser,
   updateUserEmail,
   updateUserPhonenumber,
+  updateUserPassword,
 };

@@ -72,8 +72,28 @@ const updateUserPhonenumber = {
     },
 };
 
+const updateUserPassword = {
+    name: "updateUserPassword",
+    type: "AccessToken!",
+    args: {
+        newPassword: "String!",
+    },
+    resolve: async ({args: {newPassword}, context: {user, accessToken}}) => {
+        try {
+            const newAccessToken = await authServices.updateUserPassword(
+                {newPassword, user, accessToken}
+            );
+            return {accessToken: newAccessToken};
+        } catch (error) {
+            return Promise.reject(error);
+        }
+    },
+};
+
+
 export default{
     createOneUser,
     updateUserEmail,
     updateUserPhonenumber,
+    updateUserPassword,
 }

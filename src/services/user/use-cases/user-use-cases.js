@@ -49,8 +49,25 @@ const updateUserPhonenumber = async ({newPhonenumber, user, accessToken}) => {
     }
 }
 
+const updateUserPassword = async ({newPassword, user, accessToken}) => {
+    try {
+        const updatedUser = await authRepository.updateUserPassword(
+            {newPassword, user}
+        );  
+        if (!updatedUser) {
+            return Promise.reject(new Error("Error Changing Password!"))
+        }
+        await sessionUseCases.deleteSession(accessToken)
+
+        return sessionUseCases.saveNewSession(user);
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
 export default {
     createOneUser,
     updateUserEmail,
     updateUserPhonenumber,
+    updateUserPassword,
 };
