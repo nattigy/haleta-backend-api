@@ -1,11 +1,11 @@
 import {UserTC} from "../../models/user";
 
 import {authentication, authorization} from "../../middlewares";
-// import Resolvers from "./resolvers/user-resolvers";
+import Resolvers from "./resolvers/user-resolvers";
 
-// for (const resolver in Resolvers) {
-//     UserTC.addResolver(Resolvers[resolver]);
-// }
+for (const resolver in Resolvers) {
+    UserTC.addResolver(Resolvers[resolver]);
+}
 
 const UserQuery = {
     userById: UserTC.getResolver("findById", [authentication.isAuth, authorization]),
@@ -23,6 +23,8 @@ const UserMutation = {
     userRemoveById: UserTC.getResolver("removeById", [authentication.isAuth, authorization]),
     userRemoveOne: UserTC.getResolver("removeOne", [authentication.isAuth, authorization]),
     userRemoveMany: UserTC.getResolver("removeMany", [authentication.isAuth, authorization]),
+    createOneUser: UserTC.getResolver("createOneUser", [authentication.isAuth, authorization]),
+
 };
 
 export {UserQuery, UserMutation};
