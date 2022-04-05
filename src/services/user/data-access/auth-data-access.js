@@ -17,7 +17,10 @@ return Promise.reject(new Error("Phone Number has already been taken."));
 }
 
 const salt = await bcrypt.genSalt(10);
-const hashedPassword = await bcrypt.hash(password, salt);
+let hashedPassword = "";
+if (password != ""){
+    hashedPassword = await bcrypt.hash(password, salt);
+}
 
 return UserModel.create({
 firstName,

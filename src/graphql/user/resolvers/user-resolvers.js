@@ -1,3 +1,5 @@
+import authServices from "../../../services/user/use-cases/auth-use-cases";
+
 const createOneUser = {
     name: "createOneUser",
     type: "AccessToken!",
@@ -23,7 +25,7 @@ const createOneUser = {
                 firstName,
                 middleName,
                 phoneNumber,
-                password: "defaultpassword",
+                password: "",
                 email: "",
                 image: "",
             });
