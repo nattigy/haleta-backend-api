@@ -1,5 +1,4 @@
 import {schemaComposer} from "graphql-compose";
-import {Schema} from "mongoose";
 
 schemaComposer.createObjectTC({
     name: "Id",

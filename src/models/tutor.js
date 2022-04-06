@@ -4,8 +4,12 @@ import {composeWithMongoose} from "graphql-compose-mongoose";
 
 const TutorSchema = new Schema({
     tutorCustomerRelations: {
-        type: [Schema.Types.ObjectId],
-        ref: "TutorCustomerRelation",
+        type: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "TutorCustomerRelation"
+            }
+        ],
         default: []
     },
     userId: {

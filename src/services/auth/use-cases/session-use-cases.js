@@ -1,5 +1,4 @@
 import sessionDataAccess from "../data-access/session-data-access";
-import SessionDataAccess from "../data-access/session-data-access";
 import {calculateExpirationDate, jwtSign} from "../../../helpers/helpers";
 import redisServices from "../redis-services/redis-services";
 

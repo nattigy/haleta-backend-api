@@ -1,5 +1,4 @@
 import {SessionModel} from "../../../models/session";
-import {UserModel} from "../../../models/user";
 
 const saveNewSession = async (userId, jwtToken, expirationDate) => {
     try {

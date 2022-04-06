@@ -7,13 +7,11 @@ for (const resolver in Resolvers) {
     JobTC.addResolver(Resolvers[resolver]);
 }
 
-const JobQuery = {
-    
-};
+const JobQuery = {};
 
 const JobMutation = {
     createJob: JobTC.getResolver("createJob", [authentication.isAuth, authorization]),
-    
+
 };
 
 export {JobQuery, JobMutation};

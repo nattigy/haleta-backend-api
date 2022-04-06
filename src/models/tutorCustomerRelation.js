@@ -1,7 +1,6 @@
 import mongoose, {Schema} from "mongoose";
 import timestamps from "mongoose-timestamp";
 import {composeWithMongoose} from "graphql-compose-mongoose";
-import PaymentSchema from "./payment";
 
 const TutorCustomerRelationSchema = new Schema({
     tutorId: {
@@ -13,9 +12,14 @@ const TutorCustomerRelationSchema = new Schema({
         ref: "Customer",
     },
     payments: {
-        type: [PaymentSchema],
+        type: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "Payment"
+            }
+        ],
         default: []
-    }
+    },
 }, {
     collection: "tutorCustomerRelations",
 });

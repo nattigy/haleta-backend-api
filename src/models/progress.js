@@ -2,16 +2,35 @@ import mongoose, {Schema} from "mongoose";
 import timestamps from "mongoose-timestamp";
 import {composeWithMongoose} from "graphql-compose-mongoose";
 
+
+const SingleProgressSchema = new Schema({
+    startTime: Date,
+    endTime: Date,
+    duration: Number,
+    description: String,
+    remark: Boolean,
+}, {
+    collection: "singleProgressSchemas",
+});
+
 const ProgressSchema = new Schema({
     jobId: {
         type: Schema.Types.ObjectId
     },
+    totalHours: {
+        type: Number,
+        default: 0,
+    },
     startDate: Date,
     endDate: Date,
-    startTime: Date,
-    endTime: Date,
-    description: String,
-    remark: Boolean
+    status: {
+        type: String,
+        //add status enum
+    },
+    progressList: {
+        type: [SingleProgressSchema],
+        default: [],
+    }
 }, {
     collection: "progresses",
 });

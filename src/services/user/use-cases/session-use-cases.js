@@ -30,7 +30,7 @@ const deleteSession = async (accessToken) => {
     }
 }
 
-export default{
+export default {
     saveNewSession,
     deleteSession,
 };

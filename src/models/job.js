@@ -3,12 +3,26 @@ import timestamps from "mongoose-timestamp";
 import {composeWithMongoose} from "graphql-compose-mongoose";
 
 const JobSchema = new Schema({
-    tutorId: {
-        type: Schema.Types.ObjectId,
-        default:null,
-    },
     location: String,
     pricePerHour: Number,
+    totalHours: {
+        type: Number,
+        default: 0,
+    },
+    payments: {
+        type: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "Payment"
+            }
+        ],
+        default: []
+    },
+    tutorId: {
+        type: Schema.Types.ObjectId,
+        ref: "Tutor",
+        default: null,
+    },
 }, {
     collection: "jobs",
 });

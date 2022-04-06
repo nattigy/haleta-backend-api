@@ -3,19 +3,27 @@ import timestamps from "mongoose-timestamp";
 import {composeWithMongoose} from "graphql-compose-mongoose";
 
 const CustomerSchema = new Schema({
-    tutorCustomerRelations: {
-        type: [Schema.Types.ObjectId],
-        ref: "TutorCustomerRelation",
-        default: []
-    },
     userId: {
         type: Schema.Types.ObjectId,
         ref: "User",
     },
-    jobIds:{
-        type: [Schema.Types.ObjectId],
-        ref: "Job",
-        default:[]
+    tutorCustomerRelations: {
+        type: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "TutorCustomerRelation"
+            }
+        ],
+        default: []
+    },
+    jobIds: {
+        type: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "Job"
+            }
+        ],
+        default: []
     }
 }, {
     collection: "customers",
