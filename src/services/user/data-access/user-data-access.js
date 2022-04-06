@@ -1,9 +1,7 @@
 import bcrypt from "bcrypt";
 import { UserModel } from "../../../models/user";
 
-const salt = async()=>{
-  return await bcrypt.genSalt(10);
-} 
+
 
 const createOneUser = async ({
   firstName,
@@ -57,11 +55,51 @@ const updateUserPhonenumber = async ({newPhonenumber, user}) => {
 
 const updateUserPassword = async ({newPassword, user}) => {
   try {
+      const salt = await bcrypt.genSalt(10);
       const hashPassword = await bcrypt.hash(newPassword, salt);
+      console.log(hashPassword,salt)
       const updatedUser = await UserModel.findByIdAndUpdate(user._id, {password: hashPassword})
+      console.log(updatedUser)
       return updatedUser
   } catch (error) {
       Promise.reject(error)
+  }
+}
+
+const updateUserName = async ({
+  firstName, 
+  middleName, 
+  lastName, 
+  user
+}) => {
+  try {
+      await UserModel.findByIdAndUpdate(user._id, {firstName: firstName,middleName:middleName})
+  } catch (error) {
+      return Promise.reject(error);
+  }   
+};
+
+const updateUserRole = async ({role,user}) => {
+  try {
+      await UserModel.findByIdAndUpdate(user._id, {role:role}) 
+  } catch (error) {
+      return Promise.reject(error)
+  }
+}
+
+const updateUserStatus = async ({status,user}) => {
+  try {
+      await UserModel.findByIdAndUpdate(user._id, {status:status}) 
+  } catch (error) {
+      return Promise.reject(error)
+  }
+}
+
+const updateUserImage = async ({image,user}) => {
+  try {
+    await UserModel.findByIdAndUpdate(user._id, {image:image}) 
+  } catch (error) {
+      return Promise.reject(error)
   }
 }
 
@@ -70,4 +108,8 @@ export default {
   updateUserEmail,
   updateUserPhonenumber,
   updateUserPassword,
+  updateUserName,
+  updateUserRole,
+  updateUserStatus,
+  updateUserImage
 };

@@ -1,10 +1,10 @@
-import authRepository from "../data-access/user-data-access";
+import userRepository from "../data-access/user-data-access";
 import sessionUseCases from "./session-use-cases";
 
 
 const createOneUser = async ({firstName, middleName, phoneNumber, password, image, email}) => {
     try {
-        const user = await authRepository.createOneUser(
+        const user = await userRepository.createOneUser(
             {firstName, middleName,  phoneNumber, password, image, email}
         );
         if (!user) {
@@ -19,7 +19,7 @@ const createOneUser = async ({firstName, middleName, phoneNumber, password, imag
 
 const updateUserEmail = async ({newEmail, user, accessToken}) => {
     try {
-        const updatedUser = await authRepository.updateUserEmail(
+        const updatedUser = await userRepository.updateUserEmail(
             {newEmail, user}
         );  
         if (!updatedUser) {
@@ -34,7 +34,7 @@ const updateUserEmail = async ({newEmail, user, accessToken}) => {
 
 const updateUserPhonenumber = async ({newPhonenumber, user, accessToken}) => {
     try {
-        const updatedUser = await authRepository.updateUserPhonenumber(
+        const updatedUser = await userRepository.updateUserPhonenumber(
             {newPhonenumber, user}
         );  
         if (!updatedUser) {
@@ -49,7 +49,7 @@ const updateUserPhonenumber = async ({newPhonenumber, user, accessToken}) => {
 
 const updateUserPassword = async ({newPassword, user, accessToken}) => {
     try {
-        const updatedUser = await authRepository.updateUserPassword(
+        const updatedUser = await userRepository.updateUserPassword(
             {newPassword, user}
         );  
         if (!updatedUser) {
@@ -62,9 +62,49 @@ const updateUserPassword = async ({newPassword, user, accessToken}) => {
     }
 }
 
+const updateUserName = async ({firstName, middleName, lastName, user}) => {
+    try {
+        const newFirstName = firstName || user.firstName
+        const newMiddleName = middleName || user.middleName
+        const newLastName = lastName || ''
+
+        await userRepository.updateUserName({firstName:newFirstName,middleName:newMiddleName, lastName:newLastName, user:user})
+
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
+const updateUserRole = async ({role,user}) => {
+    try {
+        await userRepository.updateUserRole({role,user})
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
+const updateUserStatus = async ({status,user}) => {
+    try {
+        await userRepository.updateUserStatus({status,user})
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
+const updateUserImage = async({image,user}) => {
+    try {
+        await userRepository.updateUserImage({image,user})
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
 export default {
     createOneUser,
     updateUserEmail,
     updateUserPhonenumber,
     updateUserPassword,
+    updateUserName,
+    updateUserRole,
+    updateUserStatus,
+    updateUserImage
 };

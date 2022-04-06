@@ -24,7 +24,7 @@ const saveNewSession = async (user) => {
 const deleteSession = async (accessToken) => {
     try {
         await redisServices.deleteSession(accessToken);
-        await SessionDataAccess.deleteSession(accessToken)
+        await sessionDataAccess.deleteSession(accessToken)
     } catch (error) {
         return Promise.reject(error);
     }

@@ -18,21 +18,28 @@ async function startApolloServer() {
         context: ({req}) => {
             return {
                 user: {
-                    "firstName": "simret",
-                    "middleName": "Ashenafi",
+                    "_id": "624d4e83cec74332200a4f62",
+                    "firstName": "rebecca",
+                    "middleName": "sam",
                     "email": "",
-                    "phoneNumber": "+251970325090",
+                    "phoneNumber": "0923212825",
                     "image": "",
                     "password": "",
                     "status": "ACTIVE",
                     "role": "NORMAL",
                     "updatedAt": {
-                        "$date": "2022-04-05T19:54:30.707Z"
+                        "$date": {
+                            "$numberLong": "1649233539988"
+                        }
                     },
                     "createdAt": {
-                        "$date": "2022-04-05T19:54:30.707Z"
+                        "$date": {
+                            "$numberLong": "1649233539988"
+                        }
                     },
-                    "__v": 0
+                    "__v": {
+                        "$numberInt": "0"
+                    }
                 },
                 headers: req.headers,
                 phoneVerification: req.headers.phoneverification || "",
