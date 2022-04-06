@@ -25,9 +25,9 @@ const createOneUser = {
                 firstName,
                 middleName,
                 phoneNumber,
-                password: "",
-                email: "",
+                password: "",                
                 image: "",
+                email: "",
             });
             return {accessToken}
         } catch (error) {

@@ -2,10 +2,10 @@ import authRepository from "../data-access/user-data-access";
 import sessionUseCases from "./session-use-cases";
 
 
-const createOneUser = async ({firstName, middleName, lastName, password, phoneNumber, image, email}) => {
+const createOneUser = async ({firstName, middleName, phoneNumber, password, image, email}) => {
     try {
         const user = await authRepository.createOneUser(
-            {firstName, middleName, lastName, password, phoneNumber, image, email}
+            {firstName, middleName,  phoneNumber, password, image, email}
         );
         if (!user) {
             return Promise.reject(new Error("user create Error!"));
@@ -27,7 +27,6 @@ const updateUserEmail = async ({newEmail, user, accessToken}) => {
         }
         await sessionUseCases.deleteSession(accessToken)
 
-        return sessionUseCases.saveNewSession(user);
     } catch (error) {
         return Promise.reject(error);
     }
@@ -43,7 +42,6 @@ const updateUserPhonenumber = async ({newPhonenumber, user, accessToken}) => {
         }
         await sessionUseCases.deleteSession(accessToken)
 
-        return sessionUseCases.saveNewSession(user);
     } catch (error) {
         return Promise.reject(error);
     }
@@ -59,7 +57,6 @@ const updateUserPassword = async ({newPassword, user, accessToken}) => {
         }
         await sessionUseCases.deleteSession(accessToken)
 
-        return sessionUseCases.saveNewSession(user);
     } catch (error) {
         return Promise.reject(error);
     }

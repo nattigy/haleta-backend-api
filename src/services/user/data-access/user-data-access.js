@@ -10,8 +10,8 @@ const createOneUser = async ({
   middleName,
   phoneNumber,
   password,
-  email,
   image,
+  email,
 }) => {
   try {
     let user = await UserModel.phoneNumberExists(phoneNumber);
