@@ -12,9 +12,10 @@ const CustomerSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "User",
     },
-    jobIds: {
+    jobIds:{
         type: [Schema.Types.ObjectId],
-        ref: "Job"
+        ref: "Job",
+        default:[]
     }
 }, {
     collection: "customers",
