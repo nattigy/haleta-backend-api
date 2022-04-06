@@ -4,7 +4,8 @@ import {composeWithMongoose} from "graphql-compose-mongoose";
 
 const JobSchema = new Schema({
     tutorId: {
-        type: Schema.Types.ObjectId
+        type: Schema.Types.ObjectId,
+        default:null,
     },
     location: String,
     pricePerHour: Number,
