@@ -21,6 +21,24 @@ const createJob = {
     },
 };
 
+const assignTutor = {
+    name: "assignTutor",
+    type: "Succeed!",
+    args: {
+        tutorId: "String",
+        jobId: "String",
+        customerId: "String"
+    },
+    resolve: async ({args: {tutorId, jobId, customerId}}) => {
+        try {
+            await jobServices.assignTutor({tutorId, jobId, customerId})
+        } catch (error) {
+            return Promise.reject(error);
+        }
+    }
+}
+
 export default {
     createJob,
+    assignTutor
 };

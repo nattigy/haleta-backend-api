@@ -13,7 +13,7 @@ const JobQuery = {};
 
 const JobMutation = {
     createJob: JobTC.getResolver("createJob", [authentication.isAuth, authorization]),
-
+    assignTutor: JobTC.getResolver("assignTutor", [authentication.isAuth, authorization])
 };
 
 export {JobQuery, JobMutation};

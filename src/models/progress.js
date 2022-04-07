@@ -9,24 +9,23 @@ const SingleProgressSchema = new Schema({
     duration: Number,
     description: String,
     remark: Boolean,
-}, {
-    collection: "singleProgressSchemas",
 });
 
 const ProgressSchema = new Schema({
-    jobId: {
-        type: Schema.Types.ObjectId
-    },
+    startDate: Date,
+    endDate: Date,
     totalHours: {
         type: Number,
         default: 0,
     },
-    startDate: Date,
-    endDate: Date,
     status: {
         type: String,
         default: "ACTIVE",
         enum: ["ACTIVE", "CLOSED"],
+    },
+    jobId: {
+        type: Schema.Types.ObjectId,
+        ref: "Job"
     },
     progressList: {
         type: [SingleProgressSchema],
