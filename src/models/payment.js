@@ -14,6 +14,15 @@ const PaymentSchema = new Schema({
         default: []
     },
     total: Number,
+    progresses: {
+        type: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "Progress"
+            }
+        ],
+        default: []
+    },
 }, {
     collection: "payments",
 });

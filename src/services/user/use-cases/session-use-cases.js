@@ -30,7 +30,16 @@ const deleteSession = async (accessToken) => {
     }
 }
 
+const findAccessToken = async (userId) => {
+    try {
+        return sessionDataAccess.findAccessToken(userId)
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
 export default {
     saveNewSession,
     deleteSession,
+    findAccessToken
 };

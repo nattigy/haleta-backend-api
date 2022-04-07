@@ -11,11 +11,11 @@ const TutorCustomerRelationSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "Customer",
     },
-    payments: {
+    progresses: {
         type: [
             {
                 type: Schema.Types.ObjectId,
-                ref: "Payment"
+                ref: "Progress"
             }
         ],
         default: []

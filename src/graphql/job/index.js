@@ -3,6 +3,8 @@ import {JobTC} from "../../models/job";
 import {authentication, authorization} from "../../middlewares";
 import Resolvers from "./resolvers/job-resolvers";
 
+import "./typedefs/types"
+
 for (const resolver in Resolvers) {
     JobTC.addResolver(Resolvers[resolver]);
 }

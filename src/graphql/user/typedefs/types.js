@@ -1,13 +1,9 @@
 import {schemaComposer} from "graphql-compose";
+import {UserTC} from "../../../models/user";
 
 schemaComposer.createObjectTC({
-    // name: "AccessToken",
-    // fields: {
-    //     accessToken: "String!"
-    // },
-});
-
-schemaComposer.createObjectTC({
-    // name: "Succeed",
-    // fields: {succeed: "Boolean!"},
+    name: "user",
+    fields: {
+        user: UserTC
+    },
 });

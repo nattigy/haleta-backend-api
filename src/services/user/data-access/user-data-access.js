@@ -1,6 +1,5 @@
-import bcrypt from "bcrypt";
 import {UserModel} from "../../../models/user";
-
+import { hashPassword } from "../../../helpers/helpers";
 
 const createOneUser = async ({
                                  firstName,
@@ -19,7 +18,7 @@ const createOneUser = async ({
 
         let hashedPassword = "";
         if (password !== "") {
-            hashedPassword = await bcrypt.hash(password, salt);
+            hashedPassword = await hashPassword(password)
         }
 
         return UserModel.create({
@@ -36,27 +35,28 @@ const createOneUser = async ({
     }
 };
 
-const updateUserEmail = async ({newEmail, user}) => {
+const updateUserEmail = async ({newEmail, userId}) => {
     try {
-        return UserModel.findByIdAndUpdate(user._id, {email: newEmail})
+        await UserModel.findByIdAndUpdate(userId, {email: newEmail})
+        return findUser(userId)
     } catch (error) {
         return Promise.reject(error)
     }
 }
 
-const updateUserPhoneNumber = async ({newPhoneNumber, user}) => {
+const updateUserPhoneNumber = async ({newPhoneNumber, userId}) => {
     try {
-        return UserModel.findByIdAndUpdate(user._id, {phoneNumber: newPhoneNumber})
+        await UserModel.findByIdAndUpdate(userId, {phoneNumber: newPhoneNumber})
+        return findUser(userId)
     } catch (error) {
         return Promise.reject(error)
     }
 }
 
-const updateUserPassword = async ({newPassword, user}) => {
+const updateUserPassword = async ({newPassword, userId}) => {
     try {
-        const salt = await bcrypt.genSalt(10);
-        const hashPassword = await bcrypt.hash(newPassword, salt);
-        return UserModel.findByIdAndUpdate(user._id, {password: hashPassword})
+        const hashedPassword = await hashPassword(newPassword)
+        return UserModel.findByIdAndUpdate(userId, {password: hashedPassword})
     } catch (error) {
         return Promise.reject(error)
     }
@@ -66,26 +66,29 @@ const updateUserName = async ({
                                   firstName,
                                   middleName,
                                   lastName,
-                                  user
+                                  userId
                               }) => {
     try {
-        await UserModel.findByIdAndUpdate(user._id, {firstName, middleName, lastName})
+        await UserModel.findByIdAndUpdate(userId, {firstName, middleName, lastName})
+        return findUser(userId)
     } catch (error) {
         return Promise.reject(error);
     }
 };
 
-const updateUserRole = async ({role, user}) => {
+const updateUserRole = async ({role, userId}) => {
     try {
-        await UserModel.findByIdAndUpdate(user._id, {role: role})
+        await UserModel.findByIdAndUpdate(userId, {role: role})
+        return findUser(userId)
     } catch (error) {
         return Promise.reject(error)
     }
 }
 
-const updateUserStatus = async ({status, user}) => {
+const updateUserStatus = async ({status, userId}) => {
     try {
-        return UserModel.findByIdAndUpdate(user._id, {status: status})
+        await UserModel.findByIdAndUpdate(userId, {status: status})
+        return findUser(userId)
     } catch (error) {
         return Promise.reject(error)
     }
@@ -99,6 +102,14 @@ const updateUserImage = async ({image, user}) => {
     }
 }
 
+const findUser = async(userId) => {
+    try {
+        return UserModel.findById(userId)
+    } catch (error) {
+        return Promise.reject(error)
+    }
+}
+
 export default {
     createOneUser,
     updateUserEmail,
@@ -107,5 +118,6 @@ export default {
     updateUserName,
     updateUserRole,
     updateUserStatus,
-    updateUserImage
+    updateUserImage,
+    findUser
 };

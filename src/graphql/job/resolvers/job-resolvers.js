@@ -5,7 +5,7 @@ const createJob = {
     type: "Id!",
     args: {
         location: "String",
-        pricePerHour: "Number!",
+        pricePerHour: "Float!",
     },
     resolve: async ({args: {location, pricePerHour}, context: {user}}) => {
         try {

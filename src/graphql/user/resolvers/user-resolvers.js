@@ -3,7 +3,7 @@ import {UserTC} from "../../../models/user";
 
 const createOneUser = {
     name: "createOneUser",
-    type: UserTC,
+    type: "user",
     args: {
         firstName: "String!",
         middleName: "String!",
@@ -35,16 +35,17 @@ const createOneUser = {
 
 const updateUserEmail = {
     name: "updateUserEmail",
-    type: "Succeed!",
+    type: "user!",
     args: {
         newEmail: "String!",
+        userId: "String!"
     },
-    resolve: async ({args: {newEmail}, context: {user, accessToken}}) => {
+    resolve: async ({args: {newEmail, userId}}) => {
         try {
-            await userServices.updateUserEmail(
-                {newEmail, user, accessToken}
+            const user = await userServices.updateUserEmail(
+                {newEmail, userId}
             );
-            return {succeed: true};
+            return {user};
         } catch (error) {
             return Promise.reject(error);
         }
@@ -53,16 +54,17 @@ const updateUserEmail = {
 
 const updateUserPhoneNumber = {
     name: "updateUserPhoneNumber",
-    type: "Succeed!",
+    type: "user!",
     args: {
         newPhoneNumber: "String!",
+        userId: "String!"
     },
-    resolve: async ({args: {newPhoneNumber}, context: {user, accessToken}}) => {
+    resolve: async ({args: {newPhoneNumber,userId}}) => {
         try {
-            await userServices.updateUserPhoneNumber(
-                {newPhoneNumber, user, accessToken}
+            const user = await userServices.updateUserPhoneNumber(
+                {newPhoneNumber, userId}
             );
-            return {succeed: true}
+            return {user}
         } catch (error) {
             return Promise.reject(error);
         }
@@ -74,11 +76,12 @@ const updateUserPassword = {
     type: "Succeed!",
     args: {
         newPassword: "String!",
+        userId: "String!"
     },
-    resolve: async ({args: {newPassword}, context: {user, accessToken}}) => {
+    resolve: async ({args: {newPassword,userId}}) => {
         try {
             await userServices.updateUserPassword(
-                {newPassword, user, accessToken}
+                {newPassword, userId}
             );
             return {succeed: true};
         } catch (error) {
@@ -89,30 +92,29 @@ const updateUserPassword = {
 
 const updateUserName = {
     name: "updateUserName",
-    type: "Succeed!",
+    type: "user!",
     args: {
         firstName: "String",
         middleName: "String",
         lastName: "String",
+        userId: "String!"
     },
     resolve: async ({
                         args: {
                             firstName,
                             middleName,
                             lastName = "",
-                        },
-                        context: {
-                            user,
-                        },
+                            userId
+                        }
                     }) => {
         try {
-            await userServices.updateUserName({
+            const user =  userServices.updateUserName({
                 firstName,
                 middleName,
                 lastName,
-                user
+                userId
             });
-            return {succeed: true};
+            return {user};
         } catch (error) {
             return Promise.reject(error);
         }
@@ -122,14 +124,15 @@ const updateUserName = {
 
 const updateUserRole = {
     name: "updateUserRole",
-    type: "Succeed!",
+    type: "user!",
     args: {
         role: "String!",
+        userId: "String!"
     },
-    resolve: async ({args: {role}, context: {user}}) => {
+    resolve: async ({args: {role,userId}}) => {
         try {
-            await userServices.updateUserRole({role, user});
-            return {succeed: true};
+            const user = await userServices.updateUserRole({role, userId});
+            return {user};
         } catch (error) {
             return Promise.reject(error);
         }
@@ -138,13 +141,15 @@ const updateUserRole = {
 
 const updateUserStatus = {
     name: "updateUserStatus",
-    type: UserTC,
+    type: "user!",
     args: {
-        status: "String!"
+        status: "String!",
+        userId: "String!"
     },
-    resolve: async ({args: {status}, context: {user}}) => {
+    resolve: async ({args: {status,userId}}) => {
         try {
-            return userServices.updateUserStatus({status, user});
+            const user =  userServices.updateUserStatus({status, userId});
+            return {user};
         } catch (error) {
             return Promise.reject(error);
         }

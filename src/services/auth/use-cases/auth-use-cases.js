@@ -15,7 +15,7 @@ const signIn = async ({phoneNumber, password}) => {
             session.userCount += 1
             await sessionUseCases.updateSession(session)
         } else {
-            accessToken = await sessionUseCases.saveNewSession(user)
+            accessToken = (await sessionUseCases.saveNewSession(user)).jwtToken;
         }
 
         return accessToken;

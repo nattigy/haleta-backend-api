@@ -9,50 +9,57 @@ const createOneUser = async ({firstName, middleName, lastName, phoneNumber, pass
         if (!user) {
             return Promise.reject(new Error("user create Error!"));
         }
-        return session.jwtToken;
+        return user
     } catch (error) {
         return Promise.reject(error);
     }
 }
 
-const updateUserEmail = async ({newEmail, user, accessToken}) => {
+const updateUserEmail = async ({newEmail, userId}) => {
     try {
         const updatedUser = await userRepository.updateUserEmail(
-            {newEmail, user}
+            {newEmail, userId}
         );
         if (!updatedUser) {
             return Promise.reject(new Error("Error Changing Email!"))
         }
-        await sessionUseCases.deleteSession(accessToken)
 
+        const accessToken = await sessionUseCases.findAccessToken(userId)
+        await sessionUseCases.deleteSession(accessToken)
+        return updatedUser
     } catch (error) {
         return Promise.reject(error);
     }
 }
 
-const updateUserPhoneNumber = async ({newPhoneNumber, user, accessToken}) => {
+const updateUserPhoneNumber = async ({newPhoneNumber, userId}) => {
     try {
         const updatedUser = await userRepository.updateUserPhoneNumber(
-            {newPhoneNumber, user}
+            {newPhoneNumber, userId}
         );
         if (!updatedUser) {
             return Promise.reject(new Error("Error Changing Phone Number!"))
         }
+
+        const accessToken = await sessionUseCases.findAccessToken(userId)
         await sessionUseCases.deleteSession(accessToken)
+        return updatedUser;
 
     } catch (error) {
         return Promise.reject(error);
     }
 }
 
-const updateUserPassword = async ({newPassword, user, accessToken}) => {
+const updateUserPassword = async ({newPassword, userId}) => {
     try {
         const updatedUser = await userRepository.updateUserPassword(
-            {newPassword, user}
+            {newPassword, userId}
         );
         if (!updatedUser) {
             return Promise.reject(new Error("Error Changing Password!"))
         }
+
+        const accessToken = await sessionUseCases.findAccessToken(userId)
         await sessionUseCases.deleteSession(accessToken)
 
     } catch (error) {
@@ -60,35 +67,41 @@ const updateUserPassword = async ({newPassword, user, accessToken}) => {
     }
 }
 
-const updateUserName = async ({firstName, middleName, lastName, user}) => {
+const updateUserName = async ({firstName, middleName, lastName, userId}) => {
     try {
+        let user = userRepository.findUser(userId)
+
         const newFirstName = firstName || user.firstName
         const newMiddleName = middleName || user.middleName
         const newLastName = lastName || ''
-
-        await userRepository.updateUserName({
+        
+        const updatedUser = await userRepository.updateUserName({
             firstName: newFirstName,
             middleName: newMiddleName,
             lastName: newLastName,
-            user: user
+            userId: userId
         })
 
+        const accessToken = await sessionUseCases.findAccessToken(userId)
+        await sessionUseCases.deleteSession(accessToken)
+        return updatedUser;
+
     } catch (error) {
         return Promise.reject(error);
     }
 }
 
-const updateUserRole = async ({role, user}) => {
+const updateUserRole = async ({role, userId}) => {
     try {
-        await userRepository.updateUserRole({role, user})
+        return userRepository.updateUserRole({role, userId})
     } catch (error) {
         return Promise.reject(error);
     }
 }
 
-const updateUserStatus = async ({status, user}) => {
+const updateUserStatus = async ({status, userId}) => {
     try {
-        return userRepository.updateUserStatus({status, user})
+        return userRepository.updateUserStatus({status, userId})
     } catch (error) {
         return Promise.reject(error);
     }

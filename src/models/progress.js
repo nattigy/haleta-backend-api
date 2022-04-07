@@ -25,7 +25,8 @@ const ProgressSchema = new Schema({
     endDate: Date,
     status: {
         type: String,
-        //add status enum
+        default: "ACTIVE",
+        enum: ["ACTIVE", "CLOSED"],
     },
     progressList: {
         type: [SingleProgressSchema],

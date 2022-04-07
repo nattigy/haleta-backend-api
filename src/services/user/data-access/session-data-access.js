@@ -21,7 +21,19 @@ const deleteSession = async (accessToken) => {
     }
 }
 
+const findAccessToken = async (userId) => {
+    try {
+        const session = await SessionModel.findOne({userId})
+        if (session) {
+            return session.jwtToken
+        }
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
 export default {
     saveNewSession,
     deleteSession,
+    findAccessToken
 };
