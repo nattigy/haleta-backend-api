@@ -90,11 +90,11 @@ const resetTotalHours = async ({ progressId }) => {
 
 const addToProgressList = async ({ progressId, progress }) => {
   try {
-    let progress = await getProgress(progressId);
-    let progressList = progress.progressList;
-    progressList.push(progress);
+    // let progress = await getProgress(progressId);
+    // let progressList = progress.progressList;
+    // progressList.push(progress);
 
-    return progressRepository.updateProgressList({ progressId, progressList });
+    return progressRepository.addNewProgressList({ progressId, progress });
   } catch (error) {
     return Promise.reject(error);
   }
@@ -102,11 +102,11 @@ const addToProgressList = async ({ progressId, progress }) => {
 
 const removeFromProgressList = async ({ progressId, singleProgressId }) => {
   try {
-    let progress = await getProgress(progressId);
-    let progressList = progress.progressList;
-    progressList.remove({ _id: singleProgressId });
+    // let progress = await getProgress(progressId);
+    // let progressList = progress.progressList;
+    // progressList.remove({ _id: singleProgressId });
 
-    return progressRepository.updateProgressList({ progressId, progressList });
+    return progressRepository.removeFromProgressList({ progressId, singleProgressId });
   } catch (error) {
     return Promise.reject(error);
   }
@@ -121,20 +121,20 @@ const updateFromProgressList = async ({
   description,
 }) => {
   try {
-    let progress = await getProgress(progressId);
-    let progressList = progress.progressList;
-    const newStartTime = startTime || progressList.startTime;
-    const newEndTime = endTime || progressList.endTime;
-    const newDuration = duration || progressList.duration;
-    const newDescription = description || progressList.description;
+    // let progress = await getProgress(progressId);
+    // let progressList = progress.progressList;
+    // const newStartTime = startTime || progressList.startTime;
+    // const newEndTime = endTime || progressList.endTime;
+    // const newDuration = duration || progressList.duration;
+    // const newDescription = description || progressList.description;
 
     return progressRepository.updateProgressListInfo({
       progressId,
       singleProgressId,
-      startTime: newStartTime,
-      endTime: newEndTime,
-      duration: newDuration,
-      description: newDescription,
+      startTime,
+      endTime,
+      duration,
+      description,
     });
   } catch (error) {
     return Promise.reject(error);
