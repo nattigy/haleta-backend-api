@@ -43,9 +43,49 @@ const updateJobInfo = async ({location, pricePerHour, customerRelation, jobId}) 
     }
 }
 
+const increaseTotalHours = async ({hours,jobId}) => {
+    try {
+        const oldAmount = (getJob(jobId)).totalHours;
+        const newAmount = oldAmount + hours
+        return jobRepository.increaseTotalHours({totalHours:newAmount,jobId:jobId});
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
+const decreaseTotalHours = async ({hours,jobId}) => {
+    try {
+        const oldAmount = (getJob(jobId)).totalHours;
+        const newAmount = oldAmount - hours
+        return jobRepository.decreaseTotalHours({totalHours:newAmount,jobId});
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
+const resetTotalHours = async (jobId) => {
+    try {
+        return jobRepository.resetTotalHours(jobId);
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
+const deleteJob = async (jobId) => {
+    try {
+        await jobRepository.deleteJob(jobId)
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
 export default {
     createJob,
     getJob,
     getJobs,
-    updateJobInfo
+    updateJobInfo,
+    increaseTotalHours,
+    decreaseTotalHours,
+    resetTotalHours,
+    deleteJob
 };
