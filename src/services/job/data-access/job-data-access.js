@@ -10,25 +10,42 @@ const createJob = async ({location, pricePerHour}) => {
             pricePerHour
         });
 
-        return job._id
+        return job
 
     } catch (error) {
         return Promise.reject(error);
     }
 };
 
-const updateJobId = async (jobId, customerId) => {
+const getJob = async (jobId) => {
     try {
-
-        const job = await CustomerModel.findByIdAndUpdate(customerId, {$push: {jobIds: jobId}});
-
-        return job._id
+        return JobModel.findById(jobId)
 
     } catch (error) {
         return Promise.reject(error);
     }
-};
+}
+
+const getJobs = async () => {
+    try {
+        return JobModel.find()
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
+const updateJobInfo = async ({location, pricePerHour, customerRelation, jobId}) => {
+    try {
+        await UserModel.findByIdAndUpdate(jobId,{location, pricePerHour, customerRelation})
+        return getJob(jobId)
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
 
 export default {
     createJob,
+    getJob,
+    getJobs,
+    updateJobInfo
 }

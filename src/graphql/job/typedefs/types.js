@@ -1,4 +1,5 @@
 import {schemaComposer} from "graphql-compose";
+import {JobTC} from "../../../models/job";
 
 schemaComposer.createObjectTC({
     name: "Id",
@@ -8,6 +9,8 @@ schemaComposer.createObjectTC({
 });
 
 schemaComposer.createObjectTC({
-    name: "Succeed",
-    fields: {succeed: "Boolean!"},
+    name: "job",
+    fields: {
+        job: JobTC
+    },
 });

@@ -10,7 +10,7 @@ const createCustomer = async (userId) => {
             });
         }
 
-        return customer
+        return customer;
     } catch (error) {
         return Promise.reject(error);
     }

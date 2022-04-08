@@ -12,6 +12,7 @@ const JobSchema = new Schema({
     customerRelation: {
         type: Schema.Types.ObjectId,
         ref: "CustomerRelation",
+        default: null
     },
 }, {
     collection: "jobs",
