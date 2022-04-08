@@ -1,21 +1,6 @@
 import {CustomerModel} from "../../../models/customer";
 import {JobModel} from "../../../models/job";
 
-const createCustomer = async (userId, jobId) => {
-    try {
-        let customer = await CustomerModel.findOne({userId});
-
-        if (!customer) {
-            customer = await CustomerModel.create({
-                userId: userId,
-            });
-        }
-        updateJobId(jobId, customer.id);
-        return customer._id
-    } catch (error) {
-        return Promise.reject(error);
-    }
-};
 
 const createJob = async ({location, pricePerHour}) => {
     try {
@@ -45,6 +30,5 @@ const updateJobId = async (jobId, customerId) => {
 };
 
 export default {
-    createCustomer,
     createJob,
 }

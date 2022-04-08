@@ -12,15 +12,6 @@ const createJob = async ({location, pricePerHour, user}) => {
     }
 };
 
-const assignTutor = async ({}) => {
-    try {
-        
-    } catch (error) {
-        return Promise.reject(error);
-    }
-}
-
 export default {
     createJob,
-    assignTutor
 };
