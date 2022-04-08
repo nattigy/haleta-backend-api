@@ -4,7 +4,10 @@ import {composeWithMongoose} from "graphql-compose-mongoose";
 
 const PaymentSchema = new Schema({
     month: String,
-    total: Number,
+    totalAmount: {
+        type: Number,
+        default: 0,
+    },
     customerRelation: {
         type: Schema.Types.ObjectId,
         ref: "CustomerRelation",

@@ -1,14 +1,11 @@
 import {JobModel} from "../../../models/job";
 
-
 const createJob = async ({location, pricePerHour}) => {
     try {
-        const job = await JobModel.create({
+        return JobModel.create({
             location,
             pricePerHour
         });
-
-        return job;
     } catch (error) {
         return Promise.reject(error);
     }
@@ -39,27 +36,10 @@ const updateJobInfo = async ({location, pricePerHour, customerRelation, jobId}) 
     }
 }
 
-const increaseTotalHours = async ({totalHours,jobId}) => {
+const updateTotalHours = async ({totalHours,jobId}) => {
     try {
-        await JobModel.findByIdAndUpdate(jobId,{totalHours})
-        return getJob(jobId)
-    } catch (error) {
-        return Promise.reject(error);
-    }
-}
-
-const decreaseTotalHours = async ({totalHours,jobId}) => {
-    try {
-        await JobModel.findByIdAndUpdate(jobId,{totalHours})
-        return getJob(jobId)
-    } catch (error) {
-        return Promise.reject(error);
-    }
-}
-
-const resetTotalHours = async (jobId) => {
-    try {
-        await JobModel.findByIdAndUpdate(jobId,{totalHours:0})
+        await JobModel.findByIdAndUpdate(jobId,{totalHours});
+        return getJob(jobId);
     } catch (error) {
         return Promise.reject(error);
     }
@@ -67,7 +47,7 @@ const resetTotalHours = async (jobId) => {
 
 const deleteJob = async (jobId) => {
     try {
-        await JobModel.findByIdAndDelete(jobId)
+        await JobModel.findByIdAndDelete(jobId);
     } catch (error) {
         return Promise.reject(error);
     }
@@ -78,8 +58,6 @@ export default {
     getJob,
     getJobs,
     updateJobInfo,
-    increaseTotalHours,
-    decreaseTotalHours,
-    resetTotalHours,
+    updateTotalHours,
     deleteJob
 }

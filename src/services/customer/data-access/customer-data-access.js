@@ -5,11 +5,8 @@ const createCustomer = async (userId) => {
         let customer = await CustomerModel.findOne({userId});
 
         if (!customer) {
-            customer = await CustomerModel.create({
-                userId: userId,
-            });
+            customer = await CustomerModel.create({userId});
         }
-
         return customer;
     } catch (error) {
         return Promise.reject(error);

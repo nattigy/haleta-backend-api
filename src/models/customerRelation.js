@@ -10,10 +10,11 @@ const CustomerRelationSchema = new Schema({
     tutorId: {
         type: Schema.Types.ObjectId,
         ref: "Tutor",
+        default: null
     },
     customerId: {
         type: Schema.Types.ObjectId,
-        ref: "Customer",
+        ref: "Customer"
     },
 }, {
     collection: "customerRelations",
