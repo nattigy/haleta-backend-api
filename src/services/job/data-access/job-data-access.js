@@ -29,16 +29,16 @@ const getJobs = async () => {
 
 const updateJobInfo = async ({location, pricePerHour, customerRelation, jobId}) => {
     try {
-        await JobModel.findByIdAndUpdate(jobId,{location, pricePerHour, customerRelation});
+        await JobModel.findByIdAndUpdate(jobId, {location, pricePerHour, customerRelation});
         return getJob(jobId);
     } catch (error) {
         return Promise.reject(error);
     }
 }
 
-const updateTotalHours = async ({totalHours,jobId}) => {
+const updateTotalHours = async ({totalHours, jobId}) => {
     try {
-        await JobModel.findByIdAndUpdate(jobId,{totalHours});
+        await JobModel.findByIdAndUpdate(jobId, {totalHours});
         return getJob(jobId);
     } catch (error) {
         return Promise.reject(error);

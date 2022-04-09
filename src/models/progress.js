@@ -7,8 +7,10 @@ const SingleProgressSchema = new Schema({
     endTime: Date,
     duration: Number,
     description: String,
-    remark: {type: Boolean,
-    default: false},
+    remark: {
+        type: Boolean,
+        default: false
+    },
 });
 
 const ProgressSchema = new Schema({

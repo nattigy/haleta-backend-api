@@ -1,8 +1,8 @@
-import { PaymentModel } from "../../../models/payment";
+import {PaymentModel} from "../../../models/payment";
 
 const createPayment = async ({month, customerRelation}) => {
     try {
-        return PaymentModel.create({month,customerRelation})
+        return PaymentModel.create({month, customerRelation})
     } catch (error) {
         return Promise.reject(error);
     }
@@ -24,9 +24,9 @@ const getPayments = async () => {
     }
 }
 
-const updateTotalAmount = async ({totalAmount,paymentId}) => {
+const updateTotalAmount = async ({totalAmount, paymentId}) => {
     try {
-        PaymentModel.findByIdAndUpdate(paymentId,{totalAmount})
+        PaymentModel.findByIdAndUpdate(paymentId, {totalAmount})
         return getPayment(paymentId)
     } catch (error) {
         return Promise.reject(error);

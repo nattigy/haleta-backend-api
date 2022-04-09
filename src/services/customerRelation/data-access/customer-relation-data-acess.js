@@ -1,4 +1,4 @@
-import { CustomerRelationModel } from "../../../models/customerRelation";
+import {CustomerRelationModel} from "../../../models/customerRelation";
 
 const createCustomerRelation = async (customerId) => {
     try {
@@ -16,27 +16,27 @@ const getCustomerRelation = async (customerRelationId) => {
     }
 }
 
-const updateTotalHours = async ({totalHours,customerRelationId}) => {
+const updateTotalHours = async ({totalHours, customerRelationId}) => {
     try {
-        await CustomerRelationModel.findByIdAndUpdate(customerRelationId,{totalHours});
+        await CustomerRelationModel.findByIdAndUpdate(customerRelationId, {totalHours});
         return getCustomerRelation(customerRelationId);
     } catch (error) {
         return Promise.reject(error);
     }
 }
 
-const assignTutor = async ({customerRelationId,tutorId}) => {
+const assignTutor = async ({customerRelationId, tutorId}) => {
     try {
-        await CustomerRelationModel.findByIdAndUpdate(customerRelationId,{tutorId});
+        await CustomerRelationModel.findByIdAndUpdate(customerRelationId, {tutorId});
         return getCustomerRelation(customerRelationId);
     } catch (error) {
         return Promise.reject(error);
     }
 }
 
-const updateCustomer = async ({customerRelationId,customerId}) => {
+const updateCustomer = async ({customerRelationId, customerId}) => {
     try {
-        await CustomerRelationModel.findByIdAndUpdate(customerRelationId,{customerId});
+        await CustomerRelationModel.findByIdAndUpdate(customerRelationId, {customerId});
         return getCustomerRelation(customerRelationId)
     } catch (error) {
         return Promise.reject(error);

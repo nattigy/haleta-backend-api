@@ -1,5 +1,5 @@
 import {UserModel} from "../../../models/user";
-import { hashPassword } from "../../../helpers/helpers";
+import {hashPassword} from "../../../helpers/helpers";
 
 const createOneUser = async ({
                                  firstName,
@@ -102,7 +102,7 @@ const updateUserImage = async ({image, user}) => {
     }
 }
 
-const findUser = async(userId) => {
+const findUser = async (userId) => {
     try {
         return UserModel.findById(userId)
     } catch (error) {

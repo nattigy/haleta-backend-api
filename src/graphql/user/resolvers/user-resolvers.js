@@ -1,5 +1,4 @@
 import userServices from "../../../services/user/use-cases/user-use-cases";
-import {UserTC} from "../../../models/user";
 
 const createOneUser = {
     name: "createOneUser",
@@ -59,7 +58,7 @@ const updateUserPhoneNumber = {
         newPhoneNumber: "String!",
         userId: "String!"
     },
-    resolve: async ({args: {newPhoneNumber,userId}}) => {
+    resolve: async ({args: {newPhoneNumber, userId}}) => {
         try {
             const user = await userServices.updateUserPhoneNumber(
                 {newPhoneNumber, userId}
@@ -78,7 +77,7 @@ const updateUserPassword = {
         newPassword: "String!",
         userId: "String!"
     },
-    resolve: async ({args: {newPassword,userId}}) => {
+    resolve: async ({args: {newPassword, userId}}) => {
         try {
             await userServices.updateUserPassword(
                 {newPassword, userId}
@@ -108,7 +107,7 @@ const updateUserName = {
                         }
                     }) => {
         try {
-            const user =  userServices.updateUserName({
+            const user = userServices.updateUserName({
                 firstName,
                 middleName,
                 lastName,
@@ -129,7 +128,7 @@ const updateUserRole = {
         role: "String!",
         userId: "String!"
     },
-    resolve: async ({args: {role,userId}}) => {
+    resolve: async ({args: {role, userId}}) => {
         try {
             const user = await userServices.updateUserRole({role, userId});
             return {user};
@@ -146,9 +145,9 @@ const updateUserStatus = {
         status: "String!",
         userId: "String!"
     },
-    resolve: async ({args: {status,userId}}) => {
+    resolve: async ({args: {status, userId}}) => {
         try {
-            const user =  userServices.updateUserStatus({status, userId});
+            const user = userServices.updateUserStatus({status, userId});
             return {user};
         } catch (error) {
             return Promise.reject(error);

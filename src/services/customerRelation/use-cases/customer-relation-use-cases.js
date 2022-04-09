@@ -16,21 +16,21 @@ const getCustomerRelation = async (customerRelationId) => {
     }
 }
 
-const increaseTotalHours = async ({hours,customerRelationId}) => {
+const increaseTotalHours = async ({hours, customerRelationId}) => {
     try {
         const customerRelation = await getCustomerRelation(customerRelationId);
         const totalHours = customerRelation.totalHours + hours;
-        return customerRelationRepository.updateTotalHours({totalHours,customerRelationId})
+        return customerRelationRepository.updateTotalHours({totalHours, customerRelationId})
     } catch (error) {
         return Promise.reject(error);
     }
 }
 
-const decreaseTotalHours = async ({hours,customerRelationId}) => {
+const decreaseTotalHours = async ({hours, customerRelationId}) => {
     try {
         const customerRelation = await getCustomerRelation(customerRelationId);
         const totalHours = customerRelation.totalHours - hours;
-        return customerRelationRepository.updateTotalHours({totalHours,customerRelationId})
+        return customerRelationRepository.updateTotalHours({totalHours, customerRelationId})
     } catch (error) {
         return Promise.reject(error);
     }
@@ -38,23 +38,23 @@ const decreaseTotalHours = async ({hours,customerRelationId}) => {
 
 const resetTotalHours = async (customerRelationId) => {
     try {
-        return customerRelationRepository.updateTotalHours({totalHours:0,customerRelationId:customerRelationId});
+        return customerRelationRepository.updateTotalHours({totalHours: 0, customerRelationId: customerRelationId});
     } catch (error) {
         return Promise.reject(error);
     }
 }
 
-const assignTutor = async ({customerRelationId,tutorId}) => {
+const assignTutor = async ({customerRelationId, tutorId}) => {
     try {
-        return customerRelationRepository.assignTutor({customerRelationId,tutorId});
+        return customerRelationRepository.assignTutor({customerRelationId, tutorId});
     } catch (error) {
         return Promise.reject(error);
     }
 }
 
-const updateCustomer = async ({customerRelationId,customerId}) => {
+const updateCustomer = async ({customerRelationId, customerId}) => {
     try {
-        return customerRelationRepository.updateCustomer({customerRelationId,customerId})
+        return customerRelationRepository.updateCustomer({customerRelationId, customerId})
     } catch (error) {
         return Promise.reject(error);
     }
