@@ -1,4 +1,5 @@
 import {JobModel} from "../../../models/job";
+import {CustomerRelationModel} from "../../../models/customerRelation";
 
 const createJob = async ({location, pricePerHour}) => {
     try {
@@ -29,21 +30,35 @@ const getJobs = async () => {
 
 const updateJobInfo = async ({location, pricePerHour, customerRelation, jobId}) => {
     try {
-        await JobModel.findByIdAndUpdate(jobId, {location, pricePerHour, customerRelation});
-        return getJob(jobId);
+        return JobModel.findByIdAndUpdate(jobId, {location, pricePerHour, customerRelation},{new:true});
     } catch (error) {
         return Promise.reject(error);
     }
 }
 
-const updateTotalHours = async ({totalHours, jobId}) => {
+const increaseTotalHours = async ({jobId, hours}) => {
     try {
-        await JobModel.findByIdAndUpdate(jobId, {totalHours});
-        return getJob(jobId);
+        return JobModel.findByIdAndUpdate(jobId, {$inc: {totalHours: hours}},{new:true});
     } catch (error) {
         return Promise.reject(error);
     }
-}
+};
+
+const decreaseTotalHours = async ({jobId, hours}) => {
+    try {
+        return JobModel.findByIdAndUpdate(jobId, {$inc: {totalHours: -hours}},{new:true});
+    } catch (error) {
+        return Promise.reject(error);
+    }
+};
+
+const resetTotalHours = async ({jobId}) => {
+    try {
+        return JobModel.findByIdAndUpdate(jobId, {$set: {totalHours: 0}},{new:true});
+    } catch (error) {
+        return Promise.reject(error);
+    }
+};
 
 const deleteJob = async (jobId) => {
     try {
@@ -58,6 +73,8 @@ export default {
     getJob,
     getJobs,
     updateJobInfo,
-    updateTotalHours,
+    increaseTotalHours,
+    decreaseTotalHours,
+    resetTotalHours,
     deleteJob
 }

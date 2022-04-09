@@ -102,7 +102,7 @@ const updateUserName = {
                         args: {
                             firstName,
                             middleName,
-                            lastName = "",
+                            lastName,
                             userId
                         }
                     }) => {

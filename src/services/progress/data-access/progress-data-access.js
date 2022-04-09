@@ -24,45 +24,41 @@ const getProgresses = async () => {
     }
 };
 
-const updateProgressInfo = async (progressId, jobId, status) => {
+const updateProgressInfo = async (progressId, jobId) => {
     try {
-        return ProgressModel.findByIdAndUpdate(progressId, {jobId, status}, {new: true});
+        return ProgressModel.findByIdAndUpdate(progressId, {jobId}, {new: true});
     } catch (error) {
         return Promise.reject(error);
     }
 };
 
-const updateStartDate = async (progressId, startDate) => {
+const startProgress = async (progressId, startDate, status) => {
     try {
-        await ProgressModel.findByIdAndUpdate(progressId, {startDate});
-        return getProgress(progressId);
+        return ProgressModel.findByIdAndUpdate(progressId, {startDate, status},{new:true});
     } catch (error) {
         return Promise.reject(error);
     }
 };
 
-const updateEndDate = async (progressId, endDate) => {
+const endProgress = async (progressId, endDate, status) => {
     try {
-        await ProgressModel.findByIdAndUpdate(progressId, {endDate});
-        return getProgress(progressId);
+        return ProgressModel.findByIdAndUpdate(progressId, {endDate, status},{new:true});
     } catch (error) {
         return Promise.reject(error);
     }
 };
 
-const increaseTotalHours = async ({progressId, totalHours}) => {
+const increaseTotalHours = async ({progressId, hours}) => {
     try {
-        await ProgressModel.findByIdAndUpdate(progressId, {$inc: {totalHours: totalHours}});
-        return getProgress(progressId);
+        return ProgressModel.findByIdAndUpdate(progressId, {$inc: {totalHours: hours}},{new:true});
     } catch (error) {
         return Promise.reject(error);
     }
 };
 
-const decreaseTotalHours = async ({progressId, totalHours}) => {
+const decreaseTotalHours = async ({progressId, hours}) => {
     try {
-        await ProgressModel.findByIdAndUpdate(progressId, {$inc: {totalHours: -totalHours}});
-        return getProgress(progressId);
+        return ProgressModel.findByIdAndUpdate(progressId, {$inc: {totalHours: -hours}},{new:true});
     } catch (error) {
         return Promise.reject(error);
     }
@@ -70,8 +66,7 @@ const decreaseTotalHours = async ({progressId, totalHours}) => {
 
 const resetTotalHours = async ({progressId}) => {
     try {
-        await ProgressModel.findByIdAndUpdate(progressId, {$set: {totalHours: 0}});
-        return getProgress(progressId);
+        return ProgressModel.findByIdAndUpdate(progressId, {$set: {totalHours: 0}},{new:true});
     } catch (error) {
         return Promise.reject(error);
     }
@@ -79,8 +74,7 @@ const resetTotalHours = async ({progressId}) => {
 
 const addNewProgressList = async (progressId, progress) => {
     try {
-        await ProgressModel.findByIdAndUpdate(progressId, {$addToSet: {progressList: progress}});
-        return getProgress(progressId);
+        return ProgressModel.findByIdAndUpdate(progressId, {$addToSet: {progressList: progress}},{new:true});
     } catch (error) {
         return Promise.reject(error);
     }
@@ -88,14 +82,13 @@ const addNewProgressList = async (progressId, progress) => {
 
 const removeFromProgressList = async (progressId, singleProgressId) => {
     try {
-        await ProgressModel.findByIdAndUpdate(progressId, {$pull: {progressList: {_id: singleProgressId}}});
-        return getProgress(progressId);
+        return ProgressModel.findByIdAndUpdate(progressId, {$pull: {progressList: {_id: singleProgressId}}},{new:true});
     } catch (error) {
         return Promise.reject(error);
     }
 };
 
-const updateProgressListInfo = async ({
+const updateSingleProgress = async ({
                                           progressId,
                                           singleProgressId,
                                           startTime,
@@ -104,7 +97,7 @@ const updateProgressListInfo = async ({
                                           description
                                       }) => {
     try {
-        await ProgressModel.updateOne(
+        return ProgressModel.updateOne(
             {_id: progressId, "progressList._id": singleProgressId},
             {
                 $set: {
@@ -113,9 +106,9 @@ const updateProgressListInfo = async ({
                     "progressList.$.duration": duration,
                     "progressList.$.description": description,
                 },
-            }
+            },
+            {new:true}
         );
-        return getProgress(progressId);
     } catch (error) {
         return Promise.reject(error);
     }
@@ -127,7 +120,7 @@ const updateRemark = async ({
                                 remark
                             }) => {
     try {
-        await ProgressModel.updateOne(
+        return ProgressModel.updateOne(
             {_id: progressId, "progressList._id": singleProgressId},
             {
                 $set: {
@@ -136,7 +129,6 @@ const updateRemark = async ({
             },
             {new: true}
         );
-        return getProgress(progressId);
     } catch (error) {
         return Promise.reject(error);
     }
@@ -155,12 +147,14 @@ export default {
     getProgress,
     getProgresses,
     updateProgressInfo,
-    updateStartDate,
-    updateEndDate,
-    updateTotalHours,
-    updateProgressList,
+    startProgress,
+    endProgress,
+    increaseTotalHours,
+    decreaseTotalHours,
+    resetTotalHours,
+    removeFromProgressList,
     addNewProgressList,
-    updateProgressListInfo,
+    updateSingleProgress,
     updateRemark,
     deleteProgress,
 };

@@ -37,28 +37,26 @@ const createOneUser = async ({
 
 const updateUserEmail = async ({newEmail, userId}) => {
     try {
-        await UserModel.findByIdAndUpdate(userId, {email: newEmail})
-        return findUser(userId)
+        return UserModel.findByIdAndUpdate(userId, {email: newEmail},{new:true});
     } catch (error) {
-        return Promise.reject(error)
+        return Promise.reject(error);
     }
 }
 
 const updateUserPhoneNumber = async ({newPhoneNumber, userId}) => {
     try {
-        await UserModel.findByIdAndUpdate(userId, {phoneNumber: newPhoneNumber})
-        return findUser(userId)
+        return UserModel.findByIdAndUpdate(userId, {phoneNumber: newPhoneNumber},{new:true});
     } catch (error) {
-        return Promise.reject(error)
+        return Promise.reject(error);
     }
 }
 
 const updateUserPassword = async ({newPassword, userId}) => {
     try {
         const hashedPassword = await hashPassword(newPassword)
-        return UserModel.findByIdAndUpdate(userId, {password: hashedPassword})
+        return UserModel.findByIdAndUpdate(userId, {password: hashedPassword},{new:true});
     } catch (error) {
-        return Promise.reject(error)
+        return Promise.reject(error);
     }
 }
 
@@ -69,8 +67,7 @@ const updateUserName = async ({
                                   userId
                               }) => {
     try {
-        await UserModel.findByIdAndUpdate(userId, {firstName, middleName, lastName})
-        return findUser(userId)
+        return UserModel.findByIdAndUpdate(userId, {firstName, middleName, lastName},{new:true});
     } catch (error) {
         return Promise.reject(error);
     }
@@ -78,25 +75,23 @@ const updateUserName = async ({
 
 const updateUserRole = async ({role, userId}) => {
     try {
-        await UserModel.findByIdAndUpdate(userId, {role: role})
-        return findUser(userId)
+        return UserModel.findByIdAndUpdate(userId, {role: role},{new:true});
     } catch (error) {
-        return Promise.reject(error)
+        return Promise.reject(error);
     }
 }
 
 const updateUserStatus = async ({status, userId}) => {
     try {
-        await UserModel.findByIdAndUpdate(userId, {status: status})
-        return findUser(userId)
+        return UserModel.findByIdAndUpdate(userId, {status: status},{new:true});
     } catch (error) {
-        return Promise.reject(error)
+        return Promise.reject(error);
     }
 }
 
 const updateUserImage = async ({image, user}) => {
     try {
-        await UserModel.findByIdAndUpdate(user._id, {image: image})
+        return UserModel.findByIdAndUpdate(user._id, {image: image},{new:true})
     } catch (error) {
         return Promise.reject(error)
     }

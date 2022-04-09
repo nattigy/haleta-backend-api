@@ -1,4 +1,5 @@
 import {PaymentModel} from "../../../models/payment";
+import {JobModel} from "../../../models/job";
 
 const createPayment = async ({month, customerRelation}) => {
     try {
@@ -24,18 +25,35 @@ const getPayments = async () => {
     }
 }
 
-const updateTotalAmount = async ({totalAmount, paymentId}) => {
+const increaseTotalAmount = async ({paymentId, amount}) => {
     try {
-        PaymentModel.findByIdAndUpdate(paymentId, {totalAmount})
-        return getPayment(paymentId)
+        return PaymentModel.findByIdAndUpdate(paymentId, {$inc: {totalAmount: amount}},{new:true});
     } catch (error) {
         return Promise.reject(error);
     }
-}
+};
+
+const decreaseTotalAmount = async ({paymentId, amount}) => {
+    try {
+        return PaymentModel.findByIdAndUpdate(paymentId, {$inc: {totalAmount: -amount}},{new:true});
+    } catch (error) {
+        return Promise.reject(error);
+    }
+};
+
+const resetTotalAmount = async ({paymentId}) => {
+    try {
+        return PaymentModel.findByIdAndUpdate(paymentId, {$set: {totalAmount: 0}},{new:true});
+    } catch (error) {
+        return Promise.reject(error);
+    }
+};
 
 export default {
     createPayment,
     getPayment,
     getPayments,
-    updateTotalAmount
+    increaseTotalAmount,
+    decreaseTotalAmount,
+    resetTotalAmount
 };

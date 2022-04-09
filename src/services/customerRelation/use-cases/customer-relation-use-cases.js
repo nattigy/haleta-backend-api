@@ -16,29 +16,25 @@ const getCustomerRelation = async (customerRelationId) => {
     }
 }
 
-const increaseTotalHours = async ({hours, customerRelationId}) => {
+const increaseTotalHours = async ({customerRelationId, hours}) => {
     try {
-        const customerRelation = await getCustomerRelation(customerRelationId);
-        const totalHours = customerRelation.totalHours + hours;
-        return customerRelationRepository.updateTotalHours({totalHours, customerRelationId})
+        return customerRelationRepository.increaseTotalHours({customerRelationId, hours})
     } catch (error) {
         return Promise.reject(error);
     }
 }
 
-const decreaseTotalHours = async ({hours, customerRelationId}) => {
+const decreaseTotalHours = async ({customerRelationId, hours}) => {
     try {
-        const customerRelation = await getCustomerRelation(customerRelationId);
-        const totalHours = customerRelation.totalHours - hours;
-        return customerRelationRepository.updateTotalHours({totalHours, customerRelationId})
+        return customerRelationRepository.decreaseTotalHours({customerRelationId, hours})
     } catch (error) {
         return Promise.reject(error);
     }
 }
 
-const resetTotalHours = async (customerRelationId) => {
+const resetTotalHours = async ({customerRelationId}) => {
     try {
-        return customerRelationRepository.updateTotalHours({totalHours: 0, customerRelationId: customerRelationId});
+        return customerRelationRepository.resetTotalHours({customerRelationId});
     } catch (error) {
         return Promise.reject(error);
     }

@@ -24,29 +24,25 @@ const getPayments = async () => {
     }
 }
 
-const increaseTotalAmount = async ({amount, paymentId}) => {
+const increaseTotalAmount = async ({paymentId, amount}) => {
     try {
-        const payment = await getPayment(paymentId);
-        const totalAmount = payment.totalAmount + amount;
-        return paymentRepository.updateTotalAmount({totalAmount, paymentId})
+        return paymentRepository.increaseTotalAmount({paymentId,amount})
     } catch (error) {
         return Promise.reject(error);
     }
 }
 
-const decreaseTotalAmount = async ({amount, paymentId}) => {
+const decreaseTotalAmount = async ({paymentId, amount}) => {
     try {
-        const payment = await getPayment(paymentId);
-        const totalAmount = payment.totalAmount - amount;
-        return paymentRepository.updateTotalAmount({totalAmount, paymentId})
+        return paymentRepository.decreaseTotalAmount({paymentId,amount})
     } catch (error) {
         return Promise.reject(error);
     }
 }
 
-const resetTotalAmount = async (paymentId) => {
+const resetTotalAmount = async ({paymentId}) => {
     try {
-        return paymentRepository.updateTotalAmount({totalAmount: 0, paymentId: paymentId})
+        return paymentRepository.resetTotalAmount({paymentId})
     } catch (error) {
         return Promise.reject(error);
     }

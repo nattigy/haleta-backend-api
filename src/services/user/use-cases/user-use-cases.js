@@ -60,14 +60,10 @@ const updateUserName = async ({firstName, middleName, lastName, userId}) => {
     try {
         let user = userRepository.findUser(userId)
 
-        const newFirstName = firstName || user.firstName
-        const newMiddleName = middleName || user.middleName
-        const newLastName = lastName || ''
-
         return userRepository.updateUserName({
-            firstName: newFirstName,
-            middleName: newMiddleName,
-            lastName: newLastName,
+            firstName,
+            middleName,
+            lastName,
             userId: userId
         });
     } catch (error) {

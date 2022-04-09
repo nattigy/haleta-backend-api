@@ -1,4 +1,5 @@
 import {CustomerRelationModel} from "../../../models/customerRelation";
+import {ProgressModel} from "../../../models/progress";
 
 const createCustomerRelation = async (customerId) => {
     try {
@@ -16,19 +17,33 @@ const getCustomerRelation = async (customerRelationId) => {
     }
 }
 
-const updateTotalHours = async ({totalHours, customerRelationId}) => {
+const increaseTotalHours = async ({customerRelationId, hours}) => {
     try {
-        await CustomerRelationModel.findByIdAndUpdate(customerRelationId, {totalHours});
-        return getCustomerRelation(customerRelationId);
+        return CustomerRelationModel.findByIdAndUpdate(customerRelationId, {$inc: {totalHours: hours}},{new:true});
     } catch (error) {
         return Promise.reject(error);
     }
-}
+};
+
+const decreaseTotalHours = async ({customerRelationId, hours}) => {
+    try {
+        return CustomerRelationModel.findByIdAndUpdate(customerRelationId, {$inc: {totalHours: -hours}},{new:true});
+    } catch (error) {
+        return Promise.reject(error);
+    }
+};
+
+const resetTotalHours = async ({customerRelationId}) => {
+    try {
+        return CustomerRelationModel.findByIdAndUpdate(customerRelationId, {$set: {totalHours: 0}},{new:true});
+    } catch (error) {
+        return Promise.reject(error);
+    }
+};
 
 const assignTutor = async ({customerRelationId, tutorId}) => {
     try {
-        await CustomerRelationModel.findByIdAndUpdate(customerRelationId, {tutorId});
-        return getCustomerRelation(customerRelationId);
+        return CustomerRelationModel.findByIdAndUpdate(customerRelationId, {tutorId},{new:true});
     } catch (error) {
         return Promise.reject(error);
     }
@@ -36,8 +51,7 @@ const assignTutor = async ({customerRelationId, tutorId}) => {
 
 const updateCustomer = async ({customerRelationId, customerId}) => {
     try {
-        await CustomerRelationModel.findByIdAndUpdate(customerRelationId, {customerId});
-        return getCustomerRelation(customerRelationId)
+        return CustomerRelationModel.findByIdAndUpdate(customerRelationId, {customerId},{new:true});
     } catch (error) {
         return Promise.reject(error);
     }
@@ -46,7 +60,9 @@ const updateCustomer = async ({customerRelationId, customerId}) => {
 export default {
     createCustomerRelation,
     getCustomerRelation,
-    updateTotalHours,
+    increaseTotalHours,
+    decreaseTotalHours,
+    resetTotalHours,
     assignTutor,
     updateCustomer
 }

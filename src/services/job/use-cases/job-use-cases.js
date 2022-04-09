@@ -26,45 +26,36 @@ const getJobs = async () => {
 
 const updateJobInfo = async ({location, pricePerHour, customerRelation, jobId}) => {
     try {
-        const job = getJob(jobId)
-        const newLocation = location || job.location
-        const newPrice = pricePerHour || job.pricePerHour
-        const newCustomerRelation = customerRelation || job.customerRelation
-
         return jobRepository.updateJobInfo({
-            location: newLocation,
-            pricePerHour: newPrice,
-            customerRelation: newCustomerRelation,
-            jobId: jobId
+            location,
+            pricePerHour,
+            customerRelation,
+            jobId
         })
     } catch (error) {
         return Promise.reject(error);
     }
 }
 
-const increaseTotalHours = async ({hours, jobId}) => {
+const increaseTotalHours = async ({jobId, hours}) => {
     try {
-        const job = await getJob(jobId);
-        const totalHours = job.totalHours + hours;
-        return jobRepository.updateTotalHours({totalHours, jobId});
+        return jobRepository.increaseTotalHours({jobId, hours});
     } catch (error) {
         return Promise.reject(error);
     }
 }
 
-const decreaseTotalHours = async ({hours, jobId}) => {
+const decreaseTotalHours = async ({jobId, hours}) => {
     try {
-        const job = await getJob(jobId);
-        const totalHours = job.totalHours - hours;
-        return jobRepository.updateTotalHours({totalHours, jobId});
+        return jobRepository.decreaseTotalHours({jobId, hours});
     } catch (error) {
         return Promise.reject(error);
     }
 }
 
-const resetTotalHours = async (jobId) => {
+const resetTotalHours = async ({jobId}) => {
     try {
-        return jobRepository.updateTotalHours({totalHours: 0, jobId: jobId});
+        return jobRepository.resetTotalHours({jobId});
     } catch (error) {
         return Promise.reject(error);
     }
