@@ -1,5 +1,4 @@
 import {JobModel} from "../../../models/job";
-import {CustomerRelationModel} from "../../../models/customerRelation";
 
 const createJob = async ({location, pricePerHour}) => {
     try {
@@ -30,7 +29,18 @@ const getJobs = async () => {
 
 const updateJobInfo = async ({location, pricePerHour, customerRelation, jobId}) => {
     try {
-        return JobModel.findByIdAndUpdate(jobId, {location, pricePerHour, customerRelation},{new:true});
+        return JobModel.findByIdAndUpdate(jobId,
+            {location, pricePerHour, customerRelation},
+            {new: true},
+        );
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
+const updateJobCustomerRelationId = async ({customerRelation, jobId}) => {
+    try {
+        return JobModel.findByIdAndUpdate(jobId, {customerRelation}, {new: true});
     } catch (error) {
         return Promise.reject(error);
     }
@@ -38,7 +48,17 @@ const updateJobInfo = async ({location, pricePerHour, customerRelation, jobId}) 
 
 const increaseTotalHours = async ({jobId, hours}) => {
     try {
-        return JobModel.findByIdAndUpdate(jobId, {$inc: {totalHours: hours}},{new:true});
+        return JobModel.findByIdAndUpdate(jobId,
+            {
+                $inc: {
+                    totalHours: hours,
+                    currentHours: hours,
+                    totalPayment: "$pricePerHour" * hours,
+                    currentPayment: "$pricePerHour" * hours
+                },
+            },
+            {new: true},
+        );
     } catch (error) {
         return Promise.reject(error);
     }
@@ -46,7 +66,17 @@ const increaseTotalHours = async ({jobId, hours}) => {
 
 const decreaseTotalHours = async ({jobId, hours}) => {
     try {
-        return JobModel.findByIdAndUpdate(jobId, {$inc: {totalHours: -hours}},{new:true});
+        return JobModel.findByIdAndUpdate(jobId,
+            {
+                $inc: {
+                    totalHours: -hours,
+                    currentHours: -hours,
+                    totalPayment: -"$pricePerHour" * hours,
+                    currentPayment: -"$pricePerHour" * hours
+                },
+            },
+            {new: true},
+        );
     } catch (error) {
         return Promise.reject(error);
     }
@@ -54,7 +84,10 @@ const decreaseTotalHours = async ({jobId, hours}) => {
 
 const resetTotalHours = async ({jobId}) => {
     try {
-        return JobModel.findByIdAndUpdate(jobId, {$set: {totalHours: 0}},{new:true});
+        return JobModel.findByIdAndUpdate(jobId,
+            {$set: {currentHours: 0, currentPayment: 0}},
+            {new: true},
+        );
     } catch (error) {
         return Promise.reject(error);
     }
@@ -73,6 +106,7 @@ export default {
     getJob,
     getJobs,
     updateJobInfo,
+    updateJobCustomerRelationId,
     increaseTotalHours,
     decreaseTotalHours,
     resetTotalHours,

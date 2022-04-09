@@ -1,9 +1,9 @@
 import userRepository from "../data-access/user-data-access";
 
-const createOneUser = async ({firstName, middleName, lastName, phoneNumber, password, image, email}) => {
+const createOneUser = async ({firstName, middleName, lastName, phoneNumber, password, email}) => {
     try {
         const user = await userRepository.createOneUser(
-            {firstName, middleName, lastName, phoneNumber, password, image, email}
+            {firstName, middleName, lastName, phoneNumber, password, email}
         );
         if (!user) {
             return Promise.reject(new Error("user create Error!"));
@@ -58,13 +58,11 @@ const updateUserPassword = async ({newPassword, userId}) => {
 
 const updateUserName = async ({firstName, middleName, lastName, userId}) => {
     try {
-        let user = userRepository.findUser(userId)
-
         return userRepository.updateUserName({
             firstName,
             middleName,
             lastName,
-            userId: userId
+            userId
         });
     } catch (error) {
         return Promise.reject(error);

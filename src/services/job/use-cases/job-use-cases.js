@@ -24,11 +24,21 @@ const getJobs = async () => {
     }
 }
 
-const updateJobInfo = async ({location, pricePerHour, customerRelation, jobId}) => {
+const updateJobInfo = async ({location, pricePerHour, jobId}) => {
     try {
         return jobRepository.updateJobInfo({
             location,
             pricePerHour,
+            jobId
+        })
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
+const updateJobCustomerRelationId = async ({customerRelation, jobId}) => {
+    try {
+        return jobRepository.updateJobInfo({
             customerRelation,
             jobId
         })
@@ -74,6 +84,7 @@ export default {
     getJob,
     getJobs,
     updateJobInfo,
+    updateJobCustomerRelationId,
     increaseTotalHours,
     decreaseTotalHours,
     resetTotalHours,

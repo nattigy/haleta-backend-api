@@ -3,7 +3,11 @@ import timestamps from "mongoose-timestamp";
 import {composeWithMongoose} from "graphql-compose-mongoose";
 
 const CustomerRelationSchema = new Schema({
-    totalHours: {
+    totalPayment: {
+        type: Number,
+        default: 0,
+    },
+    currentPayment: {
         type: Number,
         default: 0,
     },

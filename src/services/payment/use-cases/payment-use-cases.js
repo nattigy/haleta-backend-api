@@ -40,19 +40,10 @@ const decreaseTotalAmount = async ({paymentId, amount}) => {
     }
 }
 
-const resetTotalAmount = async ({paymentId}) => {
-    try {
-        return paymentRepository.resetTotalAmount({paymentId})
-    } catch (error) {
-        return Promise.reject(error);
-    }
-}
-
 export default {
     createPayment,
     getPayment,
     getPayments,
     increaseTotalAmount,
     decreaseTotalAmount,
-    resetTotalAmount
 };

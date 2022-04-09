@@ -38,17 +38,25 @@ const updateProgressInfo = async (progressId, jobId) => {
     }
 };
 
-const startProgress = async (progressId, startDate, status) => {
+const startProgress = async ({progressId, startDate, status}) => {
     try {
-        return progressRepository.startProgress(progressId, startDate, status);
+        return progressRepository.startProgress({progressId, startDate, status});
     } catch (error) {
         return Promise.reject(error);
     }
 };
 
-const endProgress = async (progressId, endDate, status) => {
+const endProgress = async ({progressId, endDate, status}) => {
     try {
-        return progressRepository.endProgress(progressId, endDate, status);
+        return progressRepository.endProgress({progressId, endDate, status});
+    } catch (error) {
+        return Promise.reject(error);
+    }
+};
+
+const extendEndDateProgress = async ({progressId, endDate}) => {
+    try {
+        return progressRepository.endProgress({progressId, endDate});
     } catch (error) {
         return Promise.reject(error);
     }
@@ -65,14 +73,6 @@ const increaseTotalHours = async ({progressId, hours}) => {
 const decreaseTotalHours = async ({progressId, hours}) => {
     try {
         return progressRepository.decreaseTotalHours({progressId, hours});
-    } catch (error) {
-        return Promise.reject(error);
-    }
-};
-
-const resetTotalHours = async ({progressId}) => {
-    try {
-        return progressRepository.resetTotalHours({progressId});
     } catch (error) {
         return Promise.reject(error);
     }
@@ -118,14 +118,10 @@ const updateSingleProgress = async ({
 
 const updateRemark = async ({progressId, singleProgressId, remark}) => {
     try {
-        let progress = await getProgress(progressId);
-        let progressList = progress.progressList;
-        const newRemark = remark || progressList.remark;
-
-        return progressRepository.updateProgressListInfo({
+        return progressRepository.updateRemark({
             progressId,
             singleProgressId,
-            remark: newRemark,
+            remark,
         });
     } catch (error) {
         return Promise.reject(error);
@@ -149,7 +145,7 @@ export default {
     endProgress,
     increaseTotalHours,
     decreaseTotalHours,
-    resetTotalHours,
+    extendEndDateProgress,
     addToProgressList,
     removeFromProgressList,
     updateSingleProgress,

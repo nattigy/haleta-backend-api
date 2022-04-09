@@ -1,8 +1,8 @@
-import customerRepository from "../data-access/customer-data-access"
+import customerDataAccess from "../data-access/customer-data-access"
 
 const createCustomer = async (userId) => {
     try {
-        return customerRepository.createCustomer(userId);
+        return customerDataAccess.createCustomer(userId);
     } catch (error) {
         return Promise.reject(error);
     }
@@ -10,7 +10,7 @@ const createCustomer = async (userId) => {
 
 const getCustomer = async (customerId) => {
     try {
-        return customerRepository.getCustomer(customerId);
+        return customerDataAccess.getCustomer(customerId);
     } catch (error) {
         return Promise.reject(error);
     }
@@ -18,7 +18,7 @@ const getCustomer = async (customerId) => {
 
 const updateCustomer = async (customerId) => {
     try {
-        await customerRepository.updateCustomer(customerId)
+        await customerDataAccess.updateCustomer(customerId)
         return getCustomer(customerId)
     } catch (error) {
         return Promise.reject(error);
