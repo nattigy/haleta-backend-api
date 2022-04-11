@@ -1,5 +1,4 @@
 import sessionDataAccess from "../data-access/session-data-access";
-import SessionDataAccess from "../data-access/session-data-access";
 import {calculateExpirationDate, jwtSign} from "../../../helpers/helpers";
 import redisServices from "../redis-services/redis-services";
 
@@ -42,7 +41,7 @@ const updateSession = async (session) => {
 const deleteSession = async (accessToken) => {
     try {
         await redisServices.deleteSession(accessToken);
-        await SessionDataAccess.deleteSession(accessToken)
+        await sessionDataAccess.deleteSession(accessToken)
     } catch (error) {
         return Promise.reject(error);
     }

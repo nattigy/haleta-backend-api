@@ -1,11 +1,13 @@
 import {UserTC} from "../../models/user";
 
 import {authentication, authorization} from "../../middlewares";
-// import Resolvers from "./resolvers/user-resolvers";
+import Resolvers from "./resolvers/user-resolvers";
 
-// for (const resolver in Resolvers) {
-//     UserTC.addResolver(Resolvers[resolver]);
-// }
+import "./typedefs/types"
+
+for (const resolver in Resolvers) {
+    UserTC.addResolver(Resolvers[resolver]);
+}
 
 const UserQuery = {
     userById: UserTC.getResolver("findById", [authentication.isAuth, authorization]),
@@ -23,6 +25,14 @@ const UserMutation = {
     userRemoveById: UserTC.getResolver("removeById", [authentication.isAuth, authorization]),
     userRemoveOne: UserTC.getResolver("removeOne", [authentication.isAuth, authorization]),
     userRemoveMany: UserTC.getResolver("removeMany", [authentication.isAuth, authorization]),
+    createOneUser: UserTC.getResolver("createOneUser", [authentication.isAuth, authorization]),
+    updateUserEmail: UserTC.getResolver("updateUserEmail", [authentication.isAuth, authorization]),
+    updateUserPhoneNumber: UserTC.getResolver("updateUserPhoneNumber", [authentication.isAuth, authorization]),
+    updateUserPassword: UserTC.getResolver("updateUserPassword", [authentication.isAuth, authorization]),
+    updateUserName: UserTC.getResolver("updateUserName", [authentication.isAuth, authorization]),
+    updateUserRole: UserTC.getResolver("updateUserRole", [authentication.isAuth, authorization]),
+    updateUserStatus: UserTC.getResolver("updateUserStatus", [authentication.isAuth, authorization]),
+    updateUserImage: UserTC.getResolver("updateUserImage", [authentication.isAuth, authorization])
 };
 
 export {UserQuery, UserMutation};

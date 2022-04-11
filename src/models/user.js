@@ -9,7 +9,6 @@ const UserSchema = new Schema({
     lastName: String,
     email: String,
     phoneNumber: String,
-    image: String,
     firebaseId: String,
     password: String,
     status: {

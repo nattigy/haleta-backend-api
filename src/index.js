@@ -17,10 +17,33 @@ async function startApolloServer() {
         path: "/",
         context: ({req}) => {
             return {
-                user: req.headers.user,
+                user: {
+                    "_id": "624d4e83cec74332200a4f62",
+                    "firstName": "rebecca",
+                    "middleName": "sam",
+                    "email": "",
+                    "phoneNumber": "0923212825",
+                    "image": "",
+                    "password": "",
+                    "status": "ACTIVE",
+                    "role": "NORMAL",
+                    "updatedAt": {
+                        "$date": {
+                            "$numberLong": "1649233539988"
+                        }
+                    },
+                    "createdAt": {
+                        "$date": {
+                            "$numberLong": "1649233539988"
+                        }
+                    },
+                    "__v": {
+                        "$numberInt": "0"
+                    }
+                },
                 headers: req.headers,
                 phoneVerification: req.headers.phoneverification || "",
-                accessToken: req.headers.authorization || ""
+                accessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjRjOWU3NjkxMzZlZTEzNTZkM2ZlZDciLCJmaXJzdE5hbWUiOiJzaW1yZXQiLCJtaWRkbGVOYW1lIjoiQXNoZW5hZmkiLCJyb2xlIjoiTk9STUFMIiwiaWF0IjoxNjQ5MTg4NDcwfQ.JntDmX_i9jlFdyOFt5RebpeyZoQgqR1gClqcwyWwF7U"
             };
         },
     });
