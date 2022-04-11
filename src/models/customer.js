@@ -6,24 +6,6 @@ const CustomerSchema = new Schema({
     userId: {
         type: Schema.Types.ObjectId,
         ref: "User",
-    },
-    tutorCustomerRelations: {
-        type: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: "TutorCustomerRelation"
-            }
-        ],
-        default: []
-    },
-    jobIds: {
-        type: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: "Job"
-            }
-        ],
-        default: []
     }
 }, {
     collection: "customers",

@@ -4,24 +4,13 @@ import {composeWithMongoose} from "graphql-compose-mongoose";
 
 const PaymentSchema = new Schema({
     month: String,
-    jobs: {
-        type: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: "Job"
-            }
-        ],
-        default: []
+    totalAmount: {
+        type: Number,
+        default: 0,
     },
-    total: Number,
-    progresses: {
-        type: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: "Progress"
-            }
-        ],
-        default: []
+    customerRelation: {
+        type: Schema.Types.ObjectId,
+        ref: "CustomerRelation",
     },
 }, {
     collection: "payments",

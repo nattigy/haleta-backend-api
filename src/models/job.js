@@ -5,23 +5,26 @@ import {composeWithMongoose} from "graphql-compose-mongoose";
 const JobSchema = new Schema({
     location: String,
     pricePerHour: Number,
+    totalPayment: {
+        type: Number,
+        default: 0,
+    },
+    currentPayment: {
+        type: Number,
+        default: 0,
+    },
+    currentHours: {
+        type: Number,
+        default: 0,
+    },
     totalHours: {
         type: Number,
         default: 0,
     },
-    payments: {
-        type: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: "Payment"
-            }
-        ],
-        default: []
-    },
-    tutorId: {
+    customerRelation: {
         type: Schema.Types.ObjectId,
-        ref: "Tutor",
-        default: null,
+        ref: "CustomerRelation",
+        default: null
     },
 }, {
     collection: "jobs",

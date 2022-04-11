@@ -6,7 +6,7 @@ const findSession = async (accessToken) => {
         if (sessionData) {
             userSession = JSON.parse(sessionData)
         } else if (err) {
-            return Promise(new Error("Session Not found"))
+            return Promise.reject(new Error("Session Not found"))
         }
     })
     return userSession;

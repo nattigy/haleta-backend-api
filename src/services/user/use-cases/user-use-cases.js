@@ -1,10 +1,9 @@
 import userRepository from "../data-access/user-data-access";
-import sessionUseCases from "./session-use-cases";
 
-const createOneUser = async ({firstName, middleName, lastName, phoneNumber, password, image, email}) => {
+const createOneUser = async ({firstName, middleName, lastName, phoneNumber, password, email}) => {
     try {
         const user = await userRepository.createOneUser(
-            {firstName, middleName, lastName, phoneNumber, password, image, email}
+            {firstName, middleName, lastName, phoneNumber, password, email}
         );
         if (!user) {
             return Promise.reject(new Error("user create Error!"));
@@ -23,9 +22,6 @@ const updateUserEmail = async ({newEmail, userId}) => {
         if (!updatedUser) {
             return Promise.reject(new Error("Error Changing Email!"))
         }
-
-        const accessToken = await sessionUseCases.findAccessToken(userId)
-        await sessionUseCases.deleteSession(accessToken)
         return updatedUser
     } catch (error) {
         return Promise.reject(error);
@@ -40,11 +36,7 @@ const updateUserPhoneNumber = async ({newPhoneNumber, userId}) => {
         if (!updatedUser) {
             return Promise.reject(new Error("Error Changing Phone Number!"))
         }
-
-        const accessToken = await sessionUseCases.findAccessToken(userId)
-        await sessionUseCases.deleteSession(accessToken)
         return updatedUser;
-
     } catch (error) {
         return Promise.reject(error);
     }
@@ -58,10 +50,7 @@ const updateUserPassword = async ({newPassword, userId}) => {
         if (!updatedUser) {
             return Promise.reject(new Error("Error Changing Password!"))
         }
-
-        const accessToken = await sessionUseCases.findAccessToken(userId)
-        await sessionUseCases.deleteSession(accessToken)
-
+        return updatedUser;
     } catch (error) {
         return Promise.reject(error);
     }
@@ -69,23 +58,12 @@ const updateUserPassword = async ({newPassword, userId}) => {
 
 const updateUserName = async ({firstName, middleName, lastName, userId}) => {
     try {
-        let user = userRepository.findUser(userId)
-
-        const newFirstName = firstName || user.firstName
-        const newMiddleName = middleName || user.middleName
-        const newLastName = lastName || ''
-        
-        const updatedUser = await userRepository.updateUserName({
-            firstName: newFirstName,
-            middleName: newMiddleName,
-            lastName: newLastName,
-            userId: userId
-        })
-
-        const accessToken = await sessionUseCases.findAccessToken(userId)
-        await sessionUseCases.deleteSession(accessToken)
-        return updatedUser;
-
+        return userRepository.updateUserName({
+            firstName,
+            middleName,
+            lastName,
+            userId
+        });
     } catch (error) {
         return Promise.reject(error);
     }
