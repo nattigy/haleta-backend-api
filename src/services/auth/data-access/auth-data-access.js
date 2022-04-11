@@ -1,5 +1,5 @@
-import bcrypt from 'bcrypt';
 import {UserModel} from "../../../models/user";
+import {hashPassword} from "../../../helpers/helpers";
 
 const signIn = async ({phoneNumber, password}) => {
     try {
@@ -32,8 +32,7 @@ const signUp = async ({
             return Promise.reject(new Error("Phone Number has already been taken."));
         }
 
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
+        const hashedPassword = hashPassword(password);
 
         return UserModel.create({
             firstName,
@@ -48,8 +47,7 @@ const signUp = async ({
 
 const changePassword = async ({newPassword, user}) => {
     try {
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(newPassword, salt);
+        const hashedPassword = hashPassword(newPassword);
         return UserModel.findByIdAndUpdate(user._id, {password: hashedPassword})
     } catch (error) {
         console.log(error)

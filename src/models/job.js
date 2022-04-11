@@ -3,23 +3,24 @@ import timestamps from "mongoose-timestamp";
 import {composeWithMongoose} from "graphql-compose-mongoose";
 
 const JobSchema = new Schema({
+    name: String,
     location: String,
+    description: String,
     pricePerHour: Number,
+    startDate: Date,
+    endDate: Date,
     totalPayment: {
-        type: Number,
-        default: 0,
-    },
-    currentPayment: {
-        type: Number,
-        default: 0,
-    },
-    currentHours: {
         type: Number,
         default: 0,
     },
     totalHours: {
         type: Number,
         default: 0,
+    },
+    status: {
+        type: String,
+        default: "NEW",
+        enum: ["NEW", "PENDING", "STARTED", "PAUSED", "ERROR", "CLOSED"],
     },
     customerRelation: {
         type: Schema.Types.ObjectId,

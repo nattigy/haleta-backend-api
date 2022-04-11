@@ -26,7 +26,7 @@ const getPayments = async () => {
 
 const increaseTotalAmount = async ({paymentId, amount}) => {
     try {
-        return paymentRepository.increaseTotalAmount({paymentId,amount})
+        return paymentRepository.increaseTotalAmount({paymentId, amount})
     } catch (error) {
         return Promise.reject(error);
     }
@@ -34,7 +34,7 @@ const increaseTotalAmount = async ({paymentId, amount}) => {
 
 const decreaseTotalAmount = async ({paymentId, amount}) => {
     try {
-        return paymentRepository.decreaseTotalAmount({paymentId,amount})
+        return paymentRepository.decreaseTotalAmount({paymentId, amount})
     } catch (error) {
         return Promise.reject(error);
     }
