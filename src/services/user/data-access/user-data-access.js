@@ -2,18 +2,13 @@ import {UserModel} from "../../../models/user";
 import {hashPassword} from "../../../helpers/helpers";
 
 const createOneUser = async ({
-                                 firstName,
-                                 middleName,
-                                 lastName,
-                                 phoneNumber,
-                                 password,
-                                 image,
-                                 email,
+                                 firstName, middleName, lastName, phoneNumber, password, email,
                              }) => {
     try {
         let user = await UserModel.phoneNumberExists(phoneNumber);
         if (user) {
-            return Promise.reject(new Error("Phone Number has already been taken."));
+            return user;
+            // return Promise.reject(new Error("Phone Number has already been taken."));
         }
 
         let hashedPassword = "";
@@ -22,18 +17,29 @@ const createOneUser = async ({
         }
 
         return UserModel.create({
-            firstName,
-            middleName,
-            lastName,
-            phoneNumber,
-            password: hashedPassword,
-            email,
-            image,
+            firstName, middleName, lastName, phoneNumber, password: hashedPassword, email,
         });
     } catch (error) {
         return Promise.reject(error);
     }
 };
+
+const getUserById = async (userId) => {
+    try {
+        return UserModel.findById(userId)
+    } catch (error) {
+        return Promise.reject(error)
+    }
+}
+
+
+const getUsers = async () => {
+    try {
+        return UserModel.find()
+    } catch (error) {
+        return Promise.reject(error)
+    }
+}
 
 const updateUserEmail = async ({newEmail, userId}) => {
     try {
@@ -61,10 +67,7 @@ const updateUserPassword = async ({newPassword, userId}) => {
 }
 
 const updateUserName = async ({
-                                  firstName,
-                                  middleName,
-                                  lastName,
-                                  userId
+                                  firstName, middleName, lastName, userId
                               }) => {
     try {
         return UserModel.findByIdAndUpdate(userId, {firstName, middleName, lastName}, {new: true});
@@ -89,19 +92,11 @@ const updateUserStatus = async ({status, userId}) => {
     }
 }
 
-const updateUserImage = async ({image, user}) => {
+const deleteUser = async (userId) => {
     try {
-        return UserModel.findByIdAndUpdate(user._id, {image: image}, {new: true})
+        await UserModel.findByIdAndDelete(userId)
     } catch (error) {
-        return Promise.reject(error)
-    }
-}
-
-const findUser = async (userId) => {
-    try {
-        return UserModel.findById(userId)
-    } catch (error) {
-        return Promise.reject(error)
+        return Promise.reject(error);
     }
 }
 
@@ -113,6 +108,5 @@ export default {
     updateUserName,
     updateUserRole,
     updateUserStatus,
-    updateUserImage,
-    findUser
+    deleteUser,
 };

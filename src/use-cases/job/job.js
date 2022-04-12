@@ -18,6 +18,11 @@ const startJob = () => {
     //update job status to started and set start date
 }
 
+const finishJob = () => {
+    //check if there are unaccepted progresses (for that job) on all payments
+    //set end date, and set status to closed
+}
+
 const startMonth = () => {
     //check if there are any started jobs
     //create payment from relation, and add all list of job ids
@@ -25,7 +30,7 @@ const startMonth = () => {
 }
 
 const addProgress = () => {
-    //check the job status first
+    //check the if the job is started
     //get rate from job using the job id
     //check if job is on the payment's customer relation table
     //add progress to payment using payment id, calculate net, total and our cut
@@ -36,23 +41,40 @@ const finishMonth = () => {
     //set end date, and set status to pending on the payment
 }
 
-const finishJob = () => {
-    //check if there are unclosed payments
-    //set end date, and set status to end on the payment
+const pausePayment = () => {
+    //check if it is active if not it can not be paused
+}
+
+const closePayment = () => {
+    //only admin
+    //check for unaccepted progresses
+    //check if it is (paid or error) if not it can not be closed
+}
+
+const errorPayment = () => {
+    //check for unaccepted progresses
+    //add reminder note
+}
+
+const acceptProgress = () => {
+    //only parent
+    //single progresses
 }
 
 const acceptAllProgresses = () => {
+    //only parent
     //accept all progresses
 }
 
 const customerMakeDeposit = () => {
+    //only customer
     //check all unaccepted progresses
     //add payment information, set customerPaidAt
-    //change payment status to payed
 }
 
 const tutorMakeDeposit = () => {
+    //only tutor
     //check all if customer has deposited
     //add payment information, set tutorDepositedAt
-    //change payment status to payed
+    //change payment status to paid
 }

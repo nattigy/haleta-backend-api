@@ -21,6 +21,7 @@ const SingleProgressSchema = new Schema({
 
 const PaymentSchema = new Schema({
     month: String,
+    reminderNote: String,
     startDate: Date,
     endDate: Date,
     totalAmount: {
@@ -48,6 +49,8 @@ const PaymentSchema = new Schema({
         type: Date,
         default: null,
     },
+    tutorReceipt: String,
+    customerReceipt: String,
     status: {
         type: String,
         default: "ACTIVE",

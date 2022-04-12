@@ -4,10 +4,10 @@ const createCustomer = async (userId) => {
     try {
         let customer = await CustomerModel.findOne({userId});
 
-        if (!customer) {
-            customer = await CustomerModel.create({userId});
+        if (customer) {
+            return customer;
         }
-        return customer;
+        return CustomerModel.create({userId});
     } catch (error) {
         return Promise.reject(error);
     }
@@ -21,6 +21,14 @@ const getCustomer = async (customerId) => {
     }
 }
 
+const getCustomers = async () => {
+    try {
+        return CustomerModel.find()
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
 const updateCustomer = async (customerId) => {
     try {
         // update customer
@@ -29,8 +37,18 @@ const updateCustomer = async (customerId) => {
     }
 }
 
+const deleteCustomer = async (customerId) => {
+    try {
+        await CustomerModel.findByIdAndDelete(customerId)
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
 export default {
     createCustomer,
     getCustomer,
-    updateCustomer
+    getCustomers,
+    updateCustomer,
+    deleteCustomer
 }
