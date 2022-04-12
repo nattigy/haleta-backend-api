@@ -48,11 +48,11 @@ const acceptAllProgresses = () => {
 const customerMakeDeposit = () => {
     //check all unaccepted progresses
     //add payment information, set customerPaidAt
-    //change payment status to paied
+    //change payment status to payed
 }
 
 const tutorMakeDeposit = () => {
     //check all if customer has deposited
     //add payment information, set tutorDepositedAt
-    //change payment status to paied
+    //change payment status to payed
 }
