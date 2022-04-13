@@ -1,8 +1,8 @@
-import userRepository from "../data-access/user-data-access";
+import userDataAccess from "../data-access/user-data-access";
 
 const createOneUser = async ({firstName, middleName, lastName, phoneNumber, password, email}) => {
     try {
-        const user = await userRepository.createOneUser(
+        const user = await userDataAccess.createOneUser(
             {firstName, middleName, lastName, phoneNumber, password, email}
         );
         if (!user) {
@@ -16,7 +16,7 @@ const createOneUser = async ({firstName, middleName, lastName, phoneNumber, pass
 
 const updateUserEmail = async ({newEmail, userId}) => {
     try {
-        const updatedUser = await userRepository.updateUserEmail(
+        const updatedUser = await userDataAccess.updateUserEmail(
             {newEmail, userId}
         );
         if (!updatedUser) {
@@ -30,7 +30,7 @@ const updateUserEmail = async ({newEmail, userId}) => {
 
 const updateUserPhoneNumber = async ({newPhoneNumber, userId}) => {
     try {
-        const updatedUser = await userRepository.updateUserPhoneNumber(
+        const updatedUser = await userDataAccess.updateUserPhoneNumber(
             {newPhoneNumber, userId}
         );
         if (!updatedUser) {
@@ -44,7 +44,7 @@ const updateUserPhoneNumber = async ({newPhoneNumber, userId}) => {
 
 const updateUserPassword = async ({newPassword, userId}) => {
     try {
-        const updatedUser = await userRepository.updateUserPassword(
+        const updatedUser = await userDataAccess.updateUserPassword(
             {newPassword, userId}
         );
         if (!updatedUser) {
@@ -58,7 +58,7 @@ const updateUserPassword = async ({newPassword, userId}) => {
 
 const updateUserName = async ({firstName, middleName, lastName, userId}) => {
     try {
-        return userRepository.updateUserName({
+        return userDataAccess.updateUserName({
             firstName,
             middleName,
             lastName,
@@ -71,7 +71,7 @@ const updateUserName = async ({firstName, middleName, lastName, userId}) => {
 
 const updateUserRole = async ({role, userId}) => {
     try {
-        return userRepository.updateUserRole({role, userId})
+        return userDataAccess.updateUserRole({role, userId})
     } catch (error) {
         return Promise.reject(error);
     }
@@ -79,7 +79,7 @@ const updateUserRole = async ({role, userId}) => {
 
 const updateUserStatus = async ({status, userId}) => {
     try {
-        return userRepository.updateUserStatus({status, userId})
+        return userDataAccess.updateUserStatus({status, userId})
     } catch (error) {
         return Promise.reject(error);
     }
@@ -87,7 +87,7 @@ const updateUserStatus = async ({status, userId}) => {
 
 const updateUserImage = async ({image, user}) => {
     try {
-        await userRepository.updateUserImage({image, user})
+        await userDataAccess.updateUserImage({image, user})
     } catch (error) {
         return Promise.reject(error);
     }

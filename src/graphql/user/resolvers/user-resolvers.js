@@ -1,4 +1,4 @@
-import userServices from "../../../services/user/use-cases/user-use-cases";
+import userServices from "../../../services/user/repository/user-repository";
 
 const createOneUser = {
     name: "createOneUser",
