@@ -48,13 +48,15 @@ const updateJobCustomerRelationId = async ({customerRelation, jobId}) => {
 
 const increaseTotalHours = async ({jobId, hours}) => {
     try {
+        
+        const pricePerHour = (await JobModel.findById(jobId)).pricePerHour
         return JobModel.findByIdAndUpdate(jobId,
             {
                 $inc: {
                     totalHours: hours,
                     currentHours: hours,
-                    totalPayment: "$pricePerHour" * hours,
-                    currentPayment: "$pricePerHour" * hours
+                    totalPayment: pricePerHour * hours,
+                    currentPayment: pricePerHour * hours
                 },
             },
             {new: true},
@@ -66,13 +68,15 @@ const increaseTotalHours = async ({jobId, hours}) => {
 
 const decreaseTotalHours = async ({jobId, hours}) => {
     try {
+        const pricePerHour = (await JobModel.findById(jobId)).pricePerHour
+
         return JobModel.findByIdAndUpdate(jobId,
             {
                 $inc: {
                     totalHours: -hours,
                     currentHours: -hours,
-                    totalPayment: -"$pricePerHour" * hours,
-                    currentPayment: -"$pricePerHour" * hours
+                    totalPayment: -pricePerHour * hours,
+                    currentPayment: -pricePerHour * hours
                 },
             },
             {new: true},
