@@ -7,10 +7,6 @@ const CustomerRelationSchema = new Schema({
         type: Number,
         default: 0,
     },
-    currentPayment: {
-        type: Number,
-        default: 0,
-    },
     tutorId: {
         type: Schema.Types.ObjectId,
         ref: "Tutor",
@@ -20,6 +16,24 @@ const CustomerRelationSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "Customer"
     },
+    jobs: {
+        type: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "Job"
+            }
+        ],
+        default: []
+    },
+    payments: {
+        type: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "Payment"
+            }
+        ],
+        default: []
+    }
 }, {
     collection: "customerRelations",
 });
