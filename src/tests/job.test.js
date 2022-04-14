@@ -25,19 +25,19 @@ describe('create job', () => {
         jobId = job._id;
         expect(job.location).toEqual(location);
         expect(job.pricePerHour).toEqual(pricePerHour);
-  
+
     })
 })
 
 describe('find jobs', () => {
     it ('get job', async () => {
-    
+
         const result = await jobDataAccess.getJob( jobId )
         expect(result._id).toEqual(jobId);
 
     })
     it ('get job', async () => {
-    
+
         const result = await jobDataAccess.getJobs()
         console.log(result);
 
@@ -60,20 +60,20 @@ describe('update job', () => {
 
     it ('update job customer relation id', async () => {
         const customerRelation = "624c9c775837e518f179be09"
-        
+
         job = await jobDataAccess.updateJobCustomerRelationId({customerRelation, jobId
         });
         expect((job.customerRelation).toString()).toEqual(
             customerRelation
-            );
+        );
     })
 
     it('increase total hours', async () => {
         const hours = 12;
-    
+
         job = await jobDataAccess.increaseTotalHours({ jobId, hours })
         expect(job.totalHours).toEqual(hours);
-        
+
     })
 
     it('decrease total hours', async () => {
@@ -82,23 +82,16 @@ describe('update job', () => {
         job = await jobDataAccess.decreaseTotalHours({ jobId, hours })
         console.log("jobhor: ", job)
         expect(job.totalHours).toEqual(negativehours);
-        
-    })
-    
-    it ('reset total hours', async () => {
-    
-        job = await jobDataAccess.resetTotalHours({ jobId })
-        expect(job.currentHours).toEqual(0);
-        expect(job.currentPayment).toEqual(0);
 
     })
 })
 
 describe('delete job', () => {
     it ('delete job', async () => {
-    
-        job = await jobDataAccess.resetTotalHours( jobId )
-        expect(job).toEqual(null);
+
+        job = await jobDataAccess.deleteJob( jobId )
+        const nullJob = await jobDataAccess.getJob(jobId);
+        expect(nullJob).toEqual(null);
 
     })
 })

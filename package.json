@@ -9,8 +9,7 @@
     "test": "jest --testEnvironment=node --runInBand --coverage ./tests",
     "build": "babel src/index.js -d dist",
     "start": "yarn build && node dist/index.js",
-    "dev": "nodemon --exec node_modules/.bin/babel-node src/index.js",
-    "test": "jest --testEnvironment=node --runInBand --coverage ./tests"
+    "dev": "nodemon --exec node_modules/.bin/babel-node src/index.js"
   },
   "dependencies": {
     "apollo-server-express": "^3.6.6",
