@@ -39,7 +39,6 @@ describe('find jobs', () => {
     it ('get job', async () => {
 
         const result = await jobDataAccess.getJobs()
-        console.log(result);
 
     })
 })
@@ -80,7 +79,6 @@ describe('update job', () => {
         const hours = 8;
         const negativehours = job.totalHours - hours
         job = await jobDataAccess.decreaseTotalHours({ jobId, hours })
-        console.log("jobhor: ", job)
         expect(job.totalHours).toEqual(negativehours);
 
     })

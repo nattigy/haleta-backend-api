@@ -1,4 +1,4 @@
-import jobServices from "../../../services/job/use-cases/job-use-cases";
+import jobServices from "../../../services/job/repository/job-repository";
 
 const createJob = {
     name: "createJob",
