@@ -88,6 +88,12 @@ const addNewProgressList = async (
     }
 };
 
+const findSingleProgress = async ({paymentId, progressId}) => {
+    return PaymentModel.findOne(
+        {_id: paymentId, "progressList._id": progressId},
+        {"progressList.$": 1});
+}
+
 const updateSingleProgress = async ({
                                         paymentId,
                                         progressId,
@@ -97,9 +103,7 @@ const updateSingleProgress = async ({
                                         description
                                     }) => {
     try {
-        const prev = PaymentModel.findOne(
-            {_id: paymentId, "progressList._id": progressId},
-            {progressList: 1});
+        const prev = await findSingleProgress({paymentId,progressId});
 
         if (!prev) {
             return Promise.reject(new Error("Progress not found."));
@@ -111,8 +115,8 @@ const updateSingleProgress = async ({
 
         const rate = prev.progressList[0].rate;
         const prevAmount = rate * prev.progressList[0].duration;
-        return PaymentModel.updateOne(
-            {_id: paymentId, "progressList._id": progressId},
+        await PaymentModel.updateOne(
+            {_id:paymentId,"progressList._id": progressId},
             {
                 $set: {
                     "progressList.$.date": date,
@@ -126,6 +130,7 @@ const updateSingleProgress = async ({
             },
             {new: true}
         );
+        return findSingleProgress({paymentId,progressId});
     } catch (error) {
         return Promise.reject(error);
     }
@@ -137,9 +142,7 @@ const removeProgressFromList = async (
         progressId,
     }) => {
     try {
-        const prev = PaymentModel.findOne(
-            {_id: paymentId, "progressList._id": progressId},
-            {progressList: 1});
+        const prev = await findSingleProgress({paymentId,progressId});
 
         if (!prev) {
             return Promise.reject(new Error("Progress not found."));
@@ -151,10 +154,10 @@ const removeProgressFromList = async (
 
         const amount = prev.progressList[0].rate * prev.progressList[0].duration;
         return PaymentModel.updateOne(
-            {_id: paymentId, "progressList._id": progressId},
+            {_id: paymentId},
             {
                 $inc: {totalAmount: -amount},
-                $pull: {progressList: {"progressList._id": progressId}}
+                $pull: {progressList: {_id: progressId}}
             }, {new: true});
     } catch (error) {
         return Promise.reject(error);
@@ -199,6 +202,7 @@ export default {
     extendPaymentEndDate,
     addNewProgressList,
     removeProgressFromList,
+    findSingleProgress,
     updateSingleProgress,
     updateRemark,
     deletePayment,
