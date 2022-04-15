@@ -1,9 +1,11 @@
 import {JobModel} from "../../../models/job";
 
-const createJob = async ({location, pricePerHour}) => {
+const createJob = async ({name, location, description, pricePerHour}) => {
     try {
         return JobModel.create({
+            name,
             location,
+            description,
             pricePerHour
         });
     } catch (error) {
@@ -14,6 +16,14 @@ const createJob = async ({location, pricePerHour}) => {
 const getJob = async (jobId) => {
     try {
         return JobModel.findById(jobId);
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
+const getJobPricePerHour = async (jobId) => {
+    try {
+        return JobModel.findById(jobId, {pricePerHour: 1});
     } catch (error) {
         return Promise.reject(error);
     }
@@ -35,10 +45,31 @@ const updateJobStatus = async ({jobId, status}) => {
     }
 }
 
-const updateJobInfo = async ({location, pricePerHour, customerRelation, jobId}) => {
+const startJob = async ({jobId, startDate}) => {
+    try {
+        return JobModel.findByIdAndUpdate(jobId, {startDate, status: "STARTED"}, {new: true});
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
+const endJob = async ({jobId, endDate}) => {
+    try {
+        return JobModel.findByIdAndUpdate(jobId, {endDate, status: "CLOSED"}, {new: true});
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
+const updateJobInfo = async ({name, location, description, pricePerHour, jobId}) => {
     try {
         return JobModel.findByIdAndUpdate(jobId,
-            {location, pricePerHour, customerRelation},
+            {
+                name,
+                location,
+                description,
+                pricePerHour
+            },
             {new: true},
         );
     } catch (error) {
@@ -46,9 +77,9 @@ const updateJobInfo = async ({location, pricePerHour, customerRelation, jobId}) 
     }
 }
 
-const updateJobCustomerRelationId = async ({customerRelation, jobId}) => {
+const updateJobCustomerRelationId = async ({customerRelationId, jobId}) => {
     try {
-        return JobModel.findByIdAndUpdate(jobId, {customerRelation}, {new: true});
+        return JobModel.findByIdAndUpdate(jobId, {customerRelation:customerRelationId}, {new: true});
     } catch (error) {
         return Promise.reject(error);
     }
@@ -56,15 +87,13 @@ const updateJobCustomerRelationId = async ({customerRelation, jobId}) => {
 
 const increaseTotalHours = async ({jobId, hours}) => {
     try {
+        const {pricePerHour} = await getJobPricePerHour(jobId);
 
-        const pricePerHour = (await JobModel.findById(jobId)).pricePerHour
         return JobModel.findByIdAndUpdate(jobId,
             {
                 $inc: {
                     totalHours: hours,
-                    currentHours: hours,
                     totalPayment: pricePerHour * hours,
-                    currentPayment: pricePerHour * hours
                 },
             },
             {new: true},
@@ -76,15 +105,12 @@ const increaseTotalHours = async ({jobId, hours}) => {
 
 const decreaseTotalHours = async ({jobId, hours}) => {
     try {
-        const pricePerHour = (await JobModel.findById(jobId)).pricePerHour
-
+        const {pricePerHour} = await getJobPricePerHour(jobId);
         return JobModel.findByIdAndUpdate(jobId,
             {
                 $inc: {
                     totalHours: -hours,
-                    currentHours: -hours,
                     totalPayment: -pricePerHour * hours,
-                    currentPayment: -pricePerHour * hours
                 },
             },
             {new: true},
@@ -109,6 +135,7 @@ export default {
     updateJobStatus,
     updateJobInfo,
     updateJobCustomerRelationId,
+    getJobPricePerHour,
     increaseTotalHours,
     decreaseTotalHours,
     deleteJob

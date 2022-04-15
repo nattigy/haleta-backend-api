@@ -13,12 +13,16 @@ let job;
 let jobId;
 
 describe('create job', () => {
+    const name = "new job";
     const location = "aa"
-    const pricePerHour = 150
+    const description = "this is a test description"
+    const pricePerHour = 15;
 
     it('returns the created job', async() => {
         job = await jobDataAccess.createJob({
+            name,
             location,
+            description,
             pricePerHour,
         })
         // check if users are created with correct field
@@ -45,25 +49,26 @@ describe('find jobs', () => {
 
 describe('update job', () => {
     it ('update job info', async () => {
-        const location = "bahr"
-        const pricePerHour = 300
-        const customerRelation= "624c9e769136ee1356d3fed7"
+        const name = "updated name";
+        const location = "bahr";
+        const description = "updated description";
+        const pricePerHour = 300;
 
-        job = await jobDataAccess.updateJobInfo({location, pricePerHour, customerRelation, jobId});
+        job = await jobDataAccess.updateJobInfo({name,location, description,pricePerHour, jobId});
 
+        expect(job.name).toEqual(name);
         expect(job.location).toEqual(location);
+        expect(job.description).toEqual(description);
         expect(job.pricePerHour).toEqual(pricePerHour);
-        expect((job.customerRelation).toString()).toEqual(customerRelation);
-
     })
 
     it ('update job customer relation id', async () => {
-        const customerRelation = "624c9c775837e518f179be09"
+        const customerRelationId = "624c9c775837e518f179be09"
 
-        job = await jobDataAccess.updateJobCustomerRelationId({customerRelation, jobId
+        job = await jobDataAccess.updateJobCustomerRelationId({customerRelationId, jobId
         });
         expect((job.customerRelation).toString()).toEqual(
-            customerRelation
+            customerRelationId
         );
     })
 

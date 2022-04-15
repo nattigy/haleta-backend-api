@@ -14,6 +14,14 @@ const createOneUser = async ({firstName, middleName, lastName, phoneNumber, pass
     }
 }
 
+const getUserById = async (userId) => {
+    try {
+        return userDataAccess.getUserById(userId);
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
 const updateUserEmail = async ({newEmail, userId}) => {
     try {
         const updatedUser = await userDataAccess.updateUserEmail(
@@ -92,13 +100,23 @@ const updateUserImage = async ({image, user}) => {
         return Promise.reject(error);
     }
 }
+
+const removeUser = async (userId) => {
+    try {
+        await userDataAccess.removeUser(userId);
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
 export default {
     createOneUser,
+    getUserById,
     updateUserEmail,
     updateUserPhoneNumber,
     updateUserPassword,
     updateUserName,
     updateUserRole,
     updateUserStatus,
-    updateUserImage
+    updateUserImage,
+    removeUser
 };

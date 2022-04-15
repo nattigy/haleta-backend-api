@@ -72,4 +72,10 @@ describe('updates user', () => {
         user = await userRepository.updateUserStatus({status,userId});
         expect(user.status).toEqual(status);
     })
+
+    it ('removes a user', async () => {
+        await userRepository.removeUser(userId);
+        const deletedUser = await userRepository.getUserById(userId)
+        expect(deletedUser).toEqual(null);
+    })
 })

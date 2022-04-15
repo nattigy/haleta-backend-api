@@ -92,7 +92,7 @@ const updateUserStatus = async ({status, userId}) => {
     }
 }
 
-const deleteUser = async (userId) => {
+const removeUser = async (userId) => {
     try {
         await UserModel.findByIdAndDelete(userId)
     } catch (error) {
@@ -102,11 +102,12 @@ const deleteUser = async (userId) => {
 
 export default {
     createOneUser,
+    getUserById,
     updateUserEmail,
     updateUserPhoneNumber,
     updateUserPassword,
     updateUserName,
     updateUserRole,
     updateUserStatus,
-    deleteUser,
+    removeUser,
 };

@@ -1,3 +1,5 @@
+import paymentRepository from "../../services/payment/repository/payment-repository";
+
 const createJobAdmin = () => {
     //create user
     //create customer
@@ -37,8 +39,10 @@ const addProgress = () => {
     //add the amount to the job (total hours, and total payment)
 }
 
-const finishMonth = () => {
+const finishMonth = async ({paymentId,endDate,status}) => {
     //set end date, and set status to pending on the payment
+    await paymentRepository.updatePaymentStatus({paymentId,status});
+    return paymentRepository.endPayment({paymentId,endDate});
 }
 
 const pausePayment = () => {
@@ -56,9 +60,10 @@ const errorPayment = () => {
     //add reminder note
 }
 
-const acceptProgress = () => {
+const acceptProgress = async ({paymentId,progressId}) => {
     //only parent
     //single progresses
+    return paymentRepository.updateRemark({paymentId,progressId,remark:true})
 }
 
 const acceptAllProgresses = () => {
@@ -78,3 +83,4 @@ const tutorMakeDeposit = () => {
     //add payment information, set tutorDepositedAt
     //change payment status to paid
 }
+
