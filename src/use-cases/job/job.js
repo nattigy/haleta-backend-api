@@ -21,14 +21,15 @@ const startJob = () => {
 }
 
 const finishJob = () => {
-    //check if there are unaccepted progresses (for that job) on all payments
+    //only tutor
+    //check if there are unaccepted progresses (for that job) on NOT closed payments
+    // we go through all single progresses which has the same job id
     //set end date, and set status to closed
 }
 
-const startMonth = () => {
+const startMonthlyPayment = () => {
     //check if there are any started jobs
-    //create payment from relation, and add all list of job ids
-    //set start date and end date, and status to active
+    //create payment from relation, set start date and end date, and status to active
 }
 
 const addProgress = () => {
@@ -39,9 +40,9 @@ const addProgress = () => {
     //add the amount to the job (total hours, and total payment)
 }
 
-const finishMonth = async ({paymentId,endDate,status}) => {
+const finishMonthlyPayment = async ({paymentId,endDate}) => {
+    //only tutor
     //set end date, and set status to pending on the payment
-    await paymentRepository.updatePaymentStatus({paymentId,status});
     return paymentRepository.endPayment({paymentId,endDate});
 }
 
@@ -79,7 +80,6 @@ const customerMakeDeposit = () => {
 
 const tutorMakeDeposit = () => {
     //only tutor
-    //check all if customer has deposited
     //add payment information, set tutorDepositedAt
     //change payment status to paid
 }

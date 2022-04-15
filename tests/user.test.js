@@ -1,5 +1,5 @@
 import db from "./db";
-import userRepository from "../services/user/repository/user-repository";
+import userRepository from "../src/services/user/repository/user-repository";
 
 beforeAll(async () => {
     await db.connect()

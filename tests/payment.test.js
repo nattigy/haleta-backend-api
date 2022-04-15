@@ -1,5 +1,5 @@
 import db from "./db";
-import paymentDataAccess from "../services/payment/data-access/payment-data-access";
+import paymentDataAccess from "../src/services/payment/data-access/payment-data-access";
 
 beforeAll(async () => {
     await db.connect()

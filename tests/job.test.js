@@ -1,5 +1,5 @@
 import db from "./db";
-import jobDataAccess from "../services/job/data-access/job-data-access";
+import jobDataAccess from "../src/services/job/data-access/job-data-access";
 
 beforeAll(async () => {
     await db.connect()

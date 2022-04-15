@@ -63,15 +63,6 @@ const PaymentSchema = new Schema({
     progressList: {
         type: [SingleProgressSchema],
         default: [],
-    },
-    jobs: {
-        type: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: "Job",
-            }
-        ],
-        default: []
     }
 }, {
     collection: "payments",
