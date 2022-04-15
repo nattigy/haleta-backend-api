@@ -32,6 +32,14 @@ const getPayments = async () => {
     }
 }
 
+const getPaymentsWithCustomerId = async () => {
+    try {
+        return PaymentModel.find();
+    } catch (error) {
+        return Promise.reject(error);
+    }
+}
+
 const updatePaymentStatus = async ({paymentId, status}) => {
     try {
         return PaymentModel.findByIdAndUpdate(paymentId, {status}, {new: true});
